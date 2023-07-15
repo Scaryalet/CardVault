@@ -2,6 +2,7 @@
 #define USERHOME_H
 
 #include <QMainWindow>
+#include "flowlayout.h"
 
 namespace Ui {
 class UserHome;
@@ -14,7 +15,13 @@ class UserHome : public QMainWindow
 public:
     explicit UserHome(QWidget *parent = nullptr);
     ~UserHome();
+    FlowLayout *flowLayout;
+    FlowLayout *emptyFlowLayout;
 
+public slots:
+    void showUsersSets();
+    void showSetCards();
+    void emptyLayout();
 private slots:
     void on_pushButton_clicked();
 

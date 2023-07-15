@@ -15,7 +15,13 @@ class AddCard : public QMainWindow
 public:
     explicit AddCard(QWidget *parent = nullptr);
     ~AddCard();
+    QVector <QString>* PokeSets;
+    QVector <QString>* YugiSets;
 
+public slots:
+    void showSets();
+    void showNumbers();
+    void showImage();
 private:
     Ui::AddCard *ui;
 };
