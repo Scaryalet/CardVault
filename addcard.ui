@@ -27,7 +27,12 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
-    <string notr="true">background-color: rgb(255, 255, 255);</string>
+    <string notr="true">background-color: rgb(255, 255, 255);
+
+
+
+
+</string>
    </property>
    <widget class="QFrame" name="frame">
     <property name="geometry">
@@ -66,7 +71,7 @@ border: none</string>
       <string notr="true">color: rgb(0, 0, 0);</string>
      </property>
      <property name="text">
-      <string>Add A Card</string>
+      <string>Add Cards</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -82,34 +87,46 @@ border: none</string>
       <height>311</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QTabBar::Tab {
+	width: 200;
+	height: 40;
+	border: 1px solid black;
+	border-radius: 4;
+	color: black;
+
+}
+QTabWidget::Pane {
+	background-color: #fafafa;
+}
+QTabBar::Tab::Selected{
+	background-color: #d9c57e;
+
+
+}
+QLineEdit {
+	background-color: none;
+	border: 1px solid black;
+ 	border-radius: 4;
+
+}
+
+QPushButton {
+	border: 1px solid black;
+	background-color: #d9c57e;
+	border-radius: 4;
+
+
+}</string>
+    </property>
     <property name="currentIndex">
      <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>Tab 1</string>
+      <string>Single Card</string>
      </attribute>
-     <widget class="QLineEdit" name="lineEdit_6">
-      <property name="geometry">
-       <rect>
-        <x>202</x>
-        <y>170</y>
-        <width>201</width>
-        <height>31</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="lineEdit_3">
-      <property name="geometry">
-       <rect>
-        <x>202</x>
-        <y>50</y>
-        <width>201</width>
-        <height>31</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QFrame" name="frame_2">
+     <widget class="QFrame" name="cardImage">
       <property name="geometry">
        <rect>
         <x>2</x>
@@ -118,6 +135,10 @@ border: none</string>
         <height>211</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid black;
+border-radius: 5</string>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -125,32 +146,100 @@ border: none</string>
        <enum>QFrame::Raised</enum>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_5">
+     <widget class="QComboBox" name="numberCombo">
       <property name="geometry">
        <rect>
-        <x>202</x>
-        <y>110</y>
-        <width>201</width>
-        <height>31</height>
+        <x>200</x>
+        <y>170</y>
+        <width>203</width>
+        <height>33</height>
        </rect>
+      </property>
+      <property name="placeholderText">
+       <string>Card Number</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_4">
+     <widget class="QComboBox" name="setCombo">
       <property name="geometry">
        <rect>
-        <x>202</x>
-        <y>230</y>
-        <width>201</width>
-        <height>31</height>
+        <x>200</x>
+        <y>110</y>
+        <width>203</width>
+        <height>33</height>
        </rect>
       </property>
+      <property name="placeholderText">
+       <string>Set</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="franchiseCombo">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>50</y>
+        <width>203</width>
+        <height>33</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border-radius: 5;
+background-color: rgb(255, 255, 255);
+border: 1px solid black;
+ QComboBox::down-arrow {image: url(noimg); border-width: 0px;}</string>
+      </property>
+      <property name="currentText">
+       <string/>
+      </property>
+      <property name="maxVisibleItems">
+       <number>10</number>
+      </property>
+      <property name="maxCount">
+       <number>2147483646</number>
+      </property>
+      <property name="placeholderText">
+       <string>Franchise</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Pokemon</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Yu-Gi-Oh!</string>
+       </property>
+      </item>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>Multiple Cards</string>
      </attribute>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>512</y>
+      <width>204</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">border: 1px solid black;
+border-radius: 5;
+color: black;
+background-color: rgb(217, 197, 126);
+
+QPushButton::hover {
+	
+	background-color: rgb(255, 85, 255);
+}</string>
+    </property>
+    <property name="text">
+     <string>Add</string>
+    </property>
    </widget>
   </widget>
  </widget>
