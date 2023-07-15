@@ -2,6 +2,7 @@
 #define ADDCARD_H
 
 #include <QMainWindow>
+#include <QWindow>
 
 namespace Ui {
 class AddCard;
