@@ -64,6 +64,8 @@ void UserHome::showUsersSets(){
 
 void UserHome::showSetCards(){
     clearLayout(flowLayout);
+    flowLayout->setGeometry(QRect(0,0,750,300));
+
     if(ui->setsList->currentItem()->text() == "2022 McDonalds"){
         for(int i = 1; i < 20; i++){
             QPushButton* card1 = new QPushButton;
