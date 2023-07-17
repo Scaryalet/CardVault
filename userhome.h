@@ -16,12 +16,11 @@ public:
     explicit UserHome(QWidget *parent = nullptr);
     ~UserHome();
     FlowLayout *flowLayout;
-    FlowLayout *emptyFlowLayout;
 
 public slots:
     void showUsersSets();
     void showSetCards();
-    void emptyLayout();
+    void clearLayout(QLayout *layout);
 private slots:
     void on_pushButton_clicked();
 

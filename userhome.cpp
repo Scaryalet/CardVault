@@ -13,7 +13,6 @@ UserHome::UserHome(QWidget *parent) :
 {
     ui->setupUi(this);
     flowLayout = new FlowLayout;
-    emptyFlowLayout = new FlowLayout;
     flowLayout->setGeometry(QRect(0,0,750,300));
 
 
@@ -21,7 +20,6 @@ UserHome::UserHome(QWidget *parent) :
 
     connect(ui->setsCombo, &QComboBox::currentTextChanged, this, &UserHome::showUsersSets);
     connect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::showSetCards);
-    connect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::emptyLayout);
 
 
 }
@@ -65,6 +63,7 @@ void UserHome::showUsersSets(){
 
 
 void UserHome::showSetCards(){
+    clearLayout(flowLayout);
     if(ui->setsList->currentItem()->text() == "2022 McDonalds"){
         for(int i = 1; i < 20; i++){
             QPushButton* card1 = new QPushButton;
@@ -88,7 +87,19 @@ void UserHome::showSetCards(){
         ui->scrollAreaWidgetContents->setLayout(flowLayout);
     }
 }
-void UserHome::emptyLayout(){
-    ui->scrollAreaWidgetContents->setLayout(emptyFlowLayout);
+void UserHome::clearLayout(QLayout *layout) {
+    if (layout == NULL)
+        return;
+    QLayoutItem *item;
+    while((item = layout->takeAt(0))) {
+        if (item->layout()) {
+            clearLayout(item->layout());
+            delete item->layout();
+        }
+        if (item->widget()) {
+            delete item->widget();
+        }
+        delete item;
+    }
 }
 
