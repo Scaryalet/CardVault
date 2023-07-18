@@ -44,15 +44,25 @@ void UserHome::on_pushButton_2_clicked()
 }
 
 void UserHome::showUsersSets(){
+
+
+
     if(ui->setsCombo->currentText() == "Pokemon"){
-        ui->setsList->clear();
+        qDebug() << "before clear";
+        QListWidgetItem *it = ui->setsList->takeItem(ui->setsList->currentRow());
+        delete it;
+//        ui->setsList->clear();
+        qDebug() << "after clear";
+
         ui->setsList->addItem("Base Set");
         ui->setsList->addItem("2022 McDonalds");
 
 
     }
     if(ui->setsCombo->currentText() == "Yu-Gi-Oh!"){
-        ui->setsList->clear();
+        QListWidgetItem *it = ui->setsList->takeItem(ui->setsList->currentRow());
+        delete it;
+//        ui->setsList->clear();
         ui->setsList->addItem("Legend of Blue Eyes White Dragon");
         ui->setsList->addItem("Metal Raiders");
 
@@ -64,7 +74,6 @@ void UserHome::showUsersSets(){
 
 void UserHome::showSetCards(){
     clearLayout(flowLayout);
-    flowLayout->setGeometry(QRect(0,0,750,300));
 
     if(ui->setsList->currentItem()->text() == "2022 McDonalds"){
         for(int i = 1; i < 20; i++){
