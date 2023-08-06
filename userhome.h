@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "flowlayout.h"
+#include "qcombobox.h"
 
 namespace Ui {
 class UserHome;
@@ -18,6 +19,7 @@ public:
     FlowLayout *flowLayout;
 
 public slots:
+    void showFranchiseNames();
     void showUsersSets();
     void showSetCards();
     void clearLayout(QLayout *layout);
@@ -28,6 +30,7 @@ private slots:
 
 private:
     Ui::UserHome *ui;
+    QComboBox *setsCombo;
 };
 
 #endif // USERHOME_H

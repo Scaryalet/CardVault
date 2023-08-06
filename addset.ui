@@ -14,49 +14,28 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QScrollArea" name="scrollArea">
+   <widget class="QListWidget" name="listWidget">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>20</y>
-      <width>750</width>
-      <height>300</height>
+      <y>70</y>
+      <width>221</width>
+      <height>371</height>
      </rect>
     </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
+   </widget>
+   <widget class="QPushButton" name="addSetButton">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>460</y>
+      <width>75</width>
+      <height>24</height>
+     </rect>
     </property>
-    <property name="minimumSize">
-     <size>
-      <width>750</width>
-      <height>300</height>
-     </size>
+    <property name="text">
+     <string>Add Set</string>
     </property>
-    <property name="maximumSize">
-     <size>
-      <width>750</width>
-      <height>300</height>
-     </size>
-    </property>
-    <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOn</enum>
-    </property>
-    <property name="widgetResizable">
-     <bool>true</bool>
-    </property>
-    <widget class="QWidget" name="scrollAreaWidgetContents">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>734</width>
-       <height>298</height>
-      </rect>
-     </property>
-    </widget>
    </widget>
   </widget>
  </widget>

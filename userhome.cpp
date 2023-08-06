@@ -12,14 +12,14 @@ UserHome::UserHome(QWidget *parent) :
     ui(new Ui::UserHome)
 {
     ui->setupUi(this);
+    setsCombo = ui->setsCombo;
     flowLayout = new FlowLayout;
     flowLayout->setGeometry(QRect(0,0,750,300));
 
-
-
-
     connect(ui->setsCombo, &QComboBox::currentTextChanged, this, &UserHome::showUsersSets);
     connect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::showSetCards);
+
+    showFranchiseNames();
 
 
 }
@@ -27,6 +27,25 @@ UserHome::UserHome(QWidget *parent) :
 UserHome::~UserHome()
 {
     delete ui;
+}
+
+void UserHome::showFranchiseNames()
+{
+    // A set to store unique franchise names, we use QSet because QSet will not store duplicate entries
+    QSet<QString> uniqueFranchises;
+
+    // Loop through the LoggedInUser->AllSets vector to find unique franchise names
+    for (const Set& set : LoggedInUser->AllSets) {
+        uniqueFranchises.insert(set.franchiseName);
+    }
+
+    // Clear the combo box before adding new items.
+    setsCombo->clear();
+
+    // Add unique franchise names to the combo box
+    for (const QString& franchiseName : uniqueFranchises) {
+        setsCombo->addItem(franchiseName);
+    }
 }
 
 void UserHome::on_pushButton_clicked()
@@ -44,8 +63,6 @@ void UserHome::on_pushButton_2_clicked()
 }
 
 void UserHome::showUsersSets(){
-
-
 
     if(ui->setsCombo->currentText() == "Pokemon"){
         qDebug() << "before clear";
@@ -80,8 +97,9 @@ void UserHome::showSetCards(){
             QPushButton* card1 = new QPushButton;
             card1->setStyleSheet("border: 1px solid black;"
                                  "width: 150px;"
-                                 "height: 250px;"
-                                 "border-image: url(:/img/2022/001.png);");
+                                 "height: 200px;"
+                                 "border-image: url(:/img/2022/001.png);"
+                                 "margin: 20px;");
             flowLayout->addWidget(card1);
         }
         ui->scrollAreaWidgetContents->setLayout(flowLayout);

@@ -84,6 +84,13 @@ QPushButton {
       <height>411</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Bahnschrift SemiBold</family>
+      <pointsize>12</pointsize>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="styleSheet">
      <string notr="true"/>
     </property>
@@ -118,6 +125,12 @@ QPushButton {
         <height>41</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift Light</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="styleSheet">
        <string notr="true">width: 300</string>
       </property>
@@ -140,6 +153,12 @@ QPushButton {
         <height>41</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift Light</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="styleSheet">
        <string notr="true">width: 300</string>
       </property>
@@ -154,10 +173,17 @@ QPushButton {
       <property name="geometry">
        <rect>
         <x>103</x>
-        <y>149</y>
+        <y>170</y>
         <width>100</width>
         <height>41</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>12</pointsize>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="text">
        <string>Login</string>
@@ -179,6 +205,12 @@ QPushButton {
         <width>304</width>
         <height>41</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="styleSheet">
        <string notr="true">width: 300</string>
@@ -202,6 +234,12 @@ QPushButton {
         <height>41</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="styleSheet">
        <string notr="true">width: 300</string>
       </property>
@@ -223,6 +261,12 @@ QPushButton {
         <width>304</width>
         <height>41</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>10</pointsize>
+       </font>
       </property>
       <property name="styleSheet">
        <string notr="true">width: 300</string>
@@ -246,6 +290,12 @@ QPushButton {
         <height>41</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="styleSheet">
        <string notr="true">width: 300</string>
       </property>
@@ -264,6 +314,13 @@ QPushButton {
         <width>100</width>
         <height>41</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>12</pointsize>
+        <bold>true</bold>
+       </font>
       </property>
       <property name="text">
        <string>Register</string>

@@ -202,16 +202,6 @@ border: 1px solid black;
       <property name="placeholderText">
        <string>Franchise</string>
       </property>
-      <item>
-       <property name="text">
-        <string>Pokemon</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>Yu-Gi-Oh!</string>
-       </property>
-      </item>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
