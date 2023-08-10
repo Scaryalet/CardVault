@@ -22,6 +22,8 @@ public slots:
     void showSets();
     void showNumbers();
     void showImage();
+private slots:
+    void handleReturn();
 private:
     Ui::AddCard *ui;
 };

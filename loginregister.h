@@ -15,7 +15,7 @@ class LoginRegister : public QMainWindow
 public:
     LoginRegister(QWidget *parent = nullptr);
     ~LoginRegister();
-    QSqlDatabase db;
+
 
 
 
@@ -53,7 +53,7 @@ struct CurrentUser {
 
 };
 inline CurrentUser *LoggedInUser = new CurrentUser;
-
+inline QSqlDatabase db;
 
 #endif // LOGINREGISTER_H
 

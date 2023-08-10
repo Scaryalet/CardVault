@@ -21,6 +21,9 @@ AddCard::AddCard(QWidget *parent) :
     connect(ui->franchiseCombo, &QComboBox::currentTextChanged, this, &AddCard::showSets);
     connect(ui->setCombo, &QComboBox::currentTextChanged, this, &AddCard::showNumbers);
     connect(ui->numberCombo, &QComboBox::currentTextChanged, this, &AddCard::showImage);
+    connect(ui->returnButtonMultiple, &QPushButton::clicked, this, &AddCard::handleReturn);
+    connect(ui->returnButtonSingle, &QPushButton::clicked, this, &AddCard::handleReturn);
+
 
 
 
@@ -40,5 +43,10 @@ void AddCard::showNumbers(){
 
 }
 void AddCard::showImage(){
+
+}
+
+void AddCard::handleReturn(){
+    close();
 
 }
