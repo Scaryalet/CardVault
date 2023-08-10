@@ -87,6 +87,12 @@ border: none</string>
       <height>371</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Bahnschrift</family>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
     <property name="styleSheet">
      <string notr="true">QTabBar::Tab {
 	width: 200;
@@ -148,7 +154,7 @@ border-radius: 5</string>
        <enum>QFrame::Raised</enum>
       </property>
      </widget>
-     <widget class="QComboBox" name="numberCombo">
+     <widget class="QComboBox" name="sNumberCombo">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -168,10 +174,10 @@ border-radius: 5</string>
        <string notr="true">background-color: rgb(255, 252, 226);</string>
       </property>
       <property name="placeholderText">
-       <string>Card Number</string>
+       <string>Number</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="setCombo">
+     <widget class="QComboBox" name="sSetCombo">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -193,7 +199,7 @@ border-radius: 5</string>
        <string>Set</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="franchiseCombo">
+     <widget class="QComboBox" name="sFranchiseCombo">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -227,7 +233,9 @@ border-radius: 5</string>
        <string>Franchise</string>
       </property>
      </widget>
+
      <widget class="QPushButton" name="addCardButton">
+
       <property name="geometry">
        <rect>
         <x>310</x>
@@ -257,7 +265,7 @@ QPushButton::hover {
        <string>Add</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="returnButtonSingle">
+     <widget class="QPushButton" name="sReturnButton">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -292,7 +300,9 @@ QPushButton::hover {
      <attribute name="title">
       <string>Multiple Cards</string>
      </attribute>
+
      <widget class="QComboBox" name="franchiseComboMultiple">
+
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -314,7 +324,9 @@ QPushButton::hover {
        <string>Franchise</string>
       </property>
      </widget>
+
      <widget class="QComboBox" name="setCombo_2">
+
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -336,7 +348,7 @@ QPushButton::hover {
        <string>Set</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBox_3">
+     <widget class="QComboBox" name="mNumberCombo">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -358,7 +370,7 @@ QPushButton::hover {
        <string>Number</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="returnButtonMultiple">
+     <widget class="QPushButton" name="mReturnButton">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -382,7 +394,7 @@ QPushButton::hover {
        <string>Return</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="mAddButton">
       <property name="geometry">
        <rect>
         <x>210</x>
@@ -406,7 +418,7 @@ QPushButton::hover {
        <string>Add</string>
       </property>
      </widget>
-     <widget class="QScrollArea" name="scrollArea">
+     <widget class="QScrollArea" name="mDisplayCards">
       <property name="geometry">
        <rect>
         <x>0</x>

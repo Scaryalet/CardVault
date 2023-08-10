@@ -17,6 +17,7 @@ AddCard::AddCard(QWidget *parent) :
 
 
 
+
     userSelectedCard = new SelectedCard;
     showFranchises();
 
@@ -27,6 +28,7 @@ AddCard::AddCard(QWidget *parent) :
     connect(ui->returnButtonMultiple, &QPushButton::clicked, this, &AddCard::handleReturn);
     connect(ui->returnButtonSingle, &QPushButton::clicked, this, &AddCard::handleReturn);
     connect(ui->addCardButton, &QPushButton::clicked, this, &AddCard::addCardSingle);
+
 
 
 
