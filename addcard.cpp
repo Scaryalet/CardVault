@@ -60,7 +60,7 @@ void AddCard::showNumbers(){
     QSqlQuery q1;
     q1.exec("SELECT * FROM Cards");
     while(q1.next()){
-        if(q1.value(5) == selectedSet){
+        if(q1.value(1) == selectedSet){
             ui->numberCombo->addItem(q1.value(0).toString());
         }
     }
@@ -74,11 +74,11 @@ void AddCard::showImage(){
     QSqlQuery q2;
     q2.exec("SELECT * FROM Cards");
     while(q2.next()){
-        if(q2.value(0).toString() == selectedCard && selectedSet == q2.value(5).toString()){
+        if(q2.value(0).toString() == selectedCard && selectedSet == q2.value(1).toString()){
             userSelectedCard->name = q2.value(0).toString();
-            userSelectedCard->number = q2.value(2).toInt();
-            userSelectedCard->set = q2.value(5).toString();
-            userSelectedCard->imgURL = q2.value(4).toString();
+            userSelectedCard->number = q2.value(3).toInt();
+            userSelectedCard->set = q2.value(1).toString();
+            userSelectedCard->imgURL = q2.value(5).toString();
         }
     }
     ui->cardImage->setStyleSheet("border-image: url(" + userSelectedCard->imgURL + ");");
