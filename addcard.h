@@ -15,8 +15,15 @@ class AddCard : public QMainWindow
 public:
     explicit AddCard(QWidget *parent = nullptr);
     ~AddCard();
-    QVector <QString>* PokeSets;
-    QVector <QString>* YugiSets;
+    QString imageURL;
+    struct SelectedCard {
+        QString name;
+        QString set;
+        int number;
+        QString rarity;
+        QString imgURL;
+    };
+    SelectedCard *userSelectedCard;
 
 public slots:
     void showSets();
@@ -24,6 +31,8 @@ public slots:
     void showImage();
 private slots:
     void handleReturn();
+    void showFranchises();
+    void addCardSingle();
 private:
     Ui::AddCard *ui;
 };

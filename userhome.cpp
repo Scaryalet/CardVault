@@ -17,8 +17,7 @@ UserHome::UserHome(QWidget *parent) :
     ui->setupUi(this);
     setsCombo = ui->setsCombo;
     setsList = ui->setsList;
-    // styling for setsList
-    ui->setsList->setStyleSheet("line-height: 20px;");
+
 
     flowLayout = new FlowLayout;
     flowLayout->setGeometry(QRect(0,0,750,300));
@@ -105,8 +104,8 @@ void UserHome::showFranchiseNames()
         uniqueFranchises.insert(set.franchiseName);
     }
 
-    // Clear the combo box before adding new items.
-    setsCombo->clear();
+//    // Clear the combo box before adding new items.
+//    setsCombo->clear();
 
     // Add unique franchise names to the combo box
     for (const QString& franchiseName : uniqueFranchises) {
@@ -143,11 +142,11 @@ void UserHome::showUsersSets(){
     // Clear the list widget before adding new items.
     setsList->clear();
 
-    // Loop through the LoggedInUser->AllSets vector to find sets matching the selected franchise.
+
     for (const Set& set : LoggedInUser->AllSets) {
         if (set.franchiseName == selectedFranchise) {
-            // Add the set name to the QListWidget.
             setsList->addItem(set.setName);
+            qDebug() << set.setName;
         }
     }
 
@@ -162,8 +161,10 @@ void UserHome::showSetCards(){
     QString selectedSet = ui->setsList->currentItem()->text();
     populateTheCards(selectedSet);
 
+
     // Reconnect the signal after populating the cards
     connect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::showSetCards);
+
 
 
 //    if(ui->setsList->currentItem()->text() == "2022 McDonalds"){
