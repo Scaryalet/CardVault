@@ -168,7 +168,7 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      <property name="font">
       <font>
        <family>Bahnschrift</family>
-       <pointsize>10</pointsize>
+       <pointsize>11</pointsize>
       </font>
      </property>
      <property name="styleSheet">
@@ -217,7 +217,7 @@ border-right: 2px solid #b8b384;
      <property name="font">
       <font>
        <family>Bahnschrift</family>
-       <pointsize>10</pointsize>
+       <pointsize>11</pointsize>
       </font>
      </property>
      <property name="autoFillBackground">
@@ -252,7 +252,7 @@ border-color: rgb(184, 179, 132);</string>
      <property name="font">
       <font>
        <family>Bahnschrift</family>
-       <pointsize>10</pointsize>
+       <pointsize>11</pointsize>
       </font>
      </property>
      <property name="styleSheet">
@@ -277,7 +277,7 @@ border-radius: 4px;
      <property name="font">
       <font>
        <family>Bahnschrift</family>
-       <pointsize>10</pointsize>
+       <pointsize>11</pointsize>
       </font>
      </property>
      <property name="styleSheet">
@@ -318,8 +318,14 @@ border-radius: 4px</string>
        <height>491</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Bahnschrift Light</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
      <property name="styleSheet">
-      <string notr="true">border: 1px solid;</string>
+      <string notr="true"/>
      </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
@@ -332,8 +338,8 @@ border-radius: 4px</string>
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>979</width>
-        <height>489</height>
+        <width>981</width>
+        <height>491</height>
        </rect>
       </property>
      </widget>

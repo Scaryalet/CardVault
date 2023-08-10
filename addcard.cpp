@@ -9,20 +9,12 @@ AddCard::AddCard(QWidget *parent) :
 {
     ui->setupUi(this);
 
-
-
-
-
-
-
-
-
     //signals
-    connect(ui->franchiseCombo, &QComboBox::currentTextChanged, this, &AddCard::showSets);
-    connect(ui->setCombo, &QComboBox::currentTextChanged, this, &AddCard::showNumbers);
-    connect(ui->numberCombo, &QComboBox::currentTextChanged, this, &AddCard::showImage);
-    connect(ui->returnButtonMultiple, &QPushButton::clicked, this, &AddCard::handleReturn);
-    connect(ui->returnButtonSingle, &QPushButton::clicked, this, &AddCard::handleReturn);
+    connect(ui->sFranchiseCombo, &QComboBox::currentTextChanged, this, &AddCard::showSets);
+    connect(ui->sSetCombo, &QComboBox::currentTextChanged, this, &AddCard::showNumbers);
+    connect(ui->sNumberCombo, &QComboBox::currentTextChanged, this, &AddCard::showImage);
+    connect(ui->mReturnButton, &QPushButton::clicked, this, &AddCard::handleReturn);
+    connect(ui->sReturnButton, &QPushButton::clicked, this, &AddCard::handleReturn);
 
 
 

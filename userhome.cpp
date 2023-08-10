@@ -13,6 +13,7 @@ UserHome::UserHome(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::UserHome)
 {
+
     ui->setupUi(this);
     setsCombo = ui->setsCombo;
     setsList = ui->setsList;
@@ -28,7 +29,7 @@ UserHome::UserHome(QWidget *parent) :
     connect(ui->userNewCard, &QPushButton::clicked, this, &UserHome::userAddCard);
     connect(ui->exitButton, &QPushButton::clicked, this, &UserHome::handleExit);
 
-
+    populateSet2022McDonalds();
     showFranchiseNames();
 
 }
@@ -37,6 +38,62 @@ UserHome::~UserHome()
 {
     delete ui;
 }
+
+
+void UserHome::populateSet2022McDonalds()
+{
+
+    QString setName = "2022 McDonalds";
+    QString franchiseName = "Pokemon";
+    int setID = 1;
+    int numberOfCards = 15;
+
+    // Insert the set into the Sets table
+    QSqlQuery q1;
+    q1.prepare("INSERT INTO Sets (Franchise, SetName, SetID, NumberOfCards) VALUES (:franchise, :setName, :setID, :NumberOfCards)");
+    q1.bindValue(":franchise", franchiseName);
+    q1.bindValue(":setName", setName);
+    q1.bindValue(":setID", setID);
+    q1.bindValue(":NumberOfCards", numberOfCards);
+    q1.exec();
+
+    // Add the set to the user's AllSets vector
+    Set s;
+    s.franchiseName = franchiseName;
+    s.setName = setName;
+    s.setId = 1;
+    s.numberOfCards = 15; // Total number of cards in the set
+    LoggedInUser->AllSets.push_back(s);
+
+    // Insert the card details into the Cards table
+    QSqlQuery q2;
+
+    for (int cardNumber = 1; cardNumber <= 15; ++cardNumber) {
+        QString cardRarity = "Common"; // Adjust the rarity as needed
+        //Input image url. cardNumber is the value of the card, 3 is the width of the string (if less than 10, two zeros go in front, less that 100, one zero)
+        //10 is the base of the number system and QLatin1Char('0') makes the character used for padding a 0.
+        QString imageURL = QString(":/img/2022/%1.png").arg(cardNumber, 3, 10, QLatin1Char('0'));
+
+        q2.prepare("INSERT INTO Cards (CardName, SetName, CardID, CardNumber, CardRarity, ImageURL) "
+                   "VALUES (:cardName, :setName, :cardID, :cardNumber, :cardRarity, :imageURL)");
+
+        q2.bindValue(":cardName", cardNumber);
+        q2.bindValue(":cardID", cardNumber);
+        q2.bindValue(":cardNumber", cardNumber);
+        q2.bindValue(":cardRarity", cardRarity);
+        q2.bindValue(":imageURL", imageURL);
+
+        q2.bindValue(":setName", setName);
+
+        q2.exec();
+
+
+    }
+
+
+
+}
+
 
 void UserHome::showFranchiseNames()
 {
@@ -57,6 +114,7 @@ void UserHome::showFranchiseNames()
     }
 }
 
+
 void UserHome::userAddSet()
 {
     addSetWindow = new class AddSet;
@@ -73,6 +131,7 @@ void UserHome::userAddCard()
     AddCard* addCard = new class AddCard;
     addCard->show();
 }
+
 
 void UserHome::showUsersSets(){
 
@@ -92,41 +151,70 @@ void UserHome::showUsersSets(){
         }
     }
 
-
-
-
-
-
 }
 
 
 void UserHome::showSetCards(){
+
+    // Disconnect the signal temporarily to avoid unnecessary calls
+    disconnect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::showSetCards);
+
+    QString selectedSet = ui->setsList->currentItem()->text();
+    populateTheCards(selectedSet);
+
+    // Reconnect the signal after populating the cards
+    connect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::showSetCards);
+
+
+//    if(ui->setsList->currentItem()->text() == "2022 McDonalds"){
+//        for(int i = 1; i < 20; i++){
+//            QPushButton* card1 = new QPushButton;
+//            card1->setStyleSheet("border: 1px solid black;"
+//                                 "width: 150px;"
+//                                 "height: 200px;"
+//                                 "border-image: url(:/img/2022/001.png);"
+//                                 "margin: 20px;");
+//            flowLayout->addWidget(card1);
+//        }
+//        ui->scrollAreaWidgetContents->setLayout(flowLayout);
+//    }
+//    if(ui->setsList->currentItem()->text() == "Base Set"){
+//        for(int i = 1; i < 20; i++){
+//            QPushButton* card1 = new QPushButton;
+//            card1->setStyleSheet("border: 1px solid black;"
+//                                 "width: 150px;"
+//                                 "height: 250px;"
+//                                 "border-image: url(:/img/2022/002.png);");
+//            flowLayout->addWidget(card1);
+//        }
+//        ui->scrollAreaWidgetContents->setLayout(flowLayout);
+//    }
+}
+
+void UserHome::populateTheCards(const QString& selectedSet){
     clearLayout(flowLayout);
 
-    if(ui->setsList->currentItem()->text() == "2022 McDonalds"){
-        for(int i = 1; i < 20; i++){
-            QPushButton* card1 = new QPushButton;
-            card1->setStyleSheet("border: 1px solid black;"
-                                 "width: 150px;"
-                                 "height: 200px;"
-                                 "border-image: url(:/img/2022/001.png);"
-                                 "margin: 20px;");
-            flowLayout->addWidget(card1);
-        }
-        ui->scrollAreaWidgetContents->setLayout(flowLayout);
+    //Searches database for cards from selected set.
+    QSqlQuery q1;
+    q1.prepare("SELECT * FROM Cards WHERE Set = :selectedSet");
+    q1.bindValue(":selectedSet", selectedSet);
+    q1.exec();
+
+    //Creates card button with image of cards.
+    while (q1.next()) {
+        QPushButton* cardButton = new QPushButton;
+        cardButton->setStyleSheet("border: 1px solid black;"
+                                  "width: 150px;"
+                                  "height: 200px;"
+                                  "border-image: url(" + q1.value(5).toString() + ");"
+                                                             "margin: 20px;");
+        flowLayout->addWidget(cardButton);
     }
-    if(ui->setsList->currentItem()->text() == "Base Set"){
-        for(int i = 1; i < 20; i++){
-            QPushButton* card1 = new QPushButton;
-            card1->setStyleSheet("border: 1px solid black;"
-                                 "width: 150px;"
-                                 "height: 250px;"
-                                 "border-image: url(:/img/2022/002.png);");
-            flowLayout->addWidget(card1);
-        }
-        ui->scrollAreaWidgetContents->setLayout(flowLayout);
-    }
-}
+
+    // Set the layout for the scroll area's contents
+    ui->scrollAreaWidgetContents->setLayout(flowLayout);
+};
+
 void UserHome::clearLayout(QLayout *layout) {
     if (layout == NULL)
         return;

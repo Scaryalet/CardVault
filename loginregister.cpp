@@ -14,7 +14,7 @@ LoginRegister::LoginRegister(QWidget *parent)
     // database connection
 
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("test.db");
+    db.setDatabaseName("pokemon.db");
     db.open();
 }
 
@@ -107,7 +107,6 @@ void LoginRegister::on_loginButton_clicked()
 
 void LoginRegister::on_registerButton_clicked()
 {
-    db.open();
     // new query
 
     if(ui->registerEmail->text() == "" || ui->registerPassword->text() == "" || ui->registerUsername->text() == "" || ui->registerPasswordConfirm->text() == "" ){
