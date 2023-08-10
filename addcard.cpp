@@ -117,6 +117,13 @@ void AddCard::showFranchises(){
 }
 
 void AddCard::addCardSingle(){
+
+
+
+
+    // FIX THIS, UPDATE DATABASE TO MATCH COLUMNS!!!!
+
+
     QSqlQuery q3;
     q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL)"
                "VALUES (:username, :cardname, :setname, :imageurl)");

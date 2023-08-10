@@ -28,10 +28,9 @@ public slots:
 private slots:
     void showFranchiseNames();
     void showUsersSets();
-    void showSetCards();
     void clearLayout(QLayout *layout);
     void addSet(const QString& setName);
-    void populateTheCards(const QString& selectedSet);
+    void populateTheCards();
     void populateSet2022McDonalds();
     void userAddCard();
     void userAddSet();
