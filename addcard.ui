@@ -82,9 +82,9 @@ border: none</string>
     <property name="geometry">
      <rect>
       <x>400</x>
-      <y>240</y>
+      <y>180</y>
       <width>411</width>
-      <height>311</height>
+      <height>371</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -120,7 +120,7 @@ QPushButton {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -131,12 +131,14 @@ QPushButton {
        <rect>
         <x>2</x>
         <y>50</y>
-        <width>171</width>
-        <height>211</height>
+        <width>173</width>
+        <height>230</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">border: 1px solid black;
+       <string notr="true">background-color: rgb(255, 252, 226);
+border-color: rgb(184, 179, 132);
+border: 1px solid black;
 border-radius: 5</string>
       </property>
       <property name="frameShape">
@@ -150,10 +152,20 @@ border-radius: 5</string>
       <property name="geometry">
        <rect>
         <x>200</x>
-        <y>170</y>
+        <y>190</y>
         <width>203</width>
-        <height>33</height>
+        <height>31</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift Light</family>
+        <pointsize>10</pointsize>
+        <kerning>true</kerning>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 252, 226);</string>
       </property>
       <property name="placeholderText">
        <string>Card Number</string>
@@ -163,10 +175,19 @@ border-radius: 5</string>
       <property name="geometry">
        <rect>
         <x>200</x>
-        <y>110</y>
+        <y>120</y>
         <width>203</width>
-        <height>33</height>
+        <height>31</height>
        </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift Light</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 252, 226);</string>
       </property>
       <property name="placeholderText">
        <string>Set</string>
@@ -178,14 +199,17 @@ border-radius: 5</string>
         <x>200</x>
         <y>50</y>
         <width>203</width>
-        <height>33</height>
+        <height>31</height>
        </rect>
       </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift Light</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
       <property name="styleSheet">
-       <string notr="true">border-radius: 5;
-background-color: rgb(255, 255, 255);
-border: 1px solid black;
- QComboBox::down-arrow {image: url(noimg); border-width: 0px;}</string>
+       <string notr="true">background-color: rgb(255, 252, 226);</string>
       </property>
       <property name="currentText">
        <string/>
@@ -203,24 +227,23 @@ border: 1px solid black;
        <string>Franchise</string>
       </property>
      </widget>
-    </widget>
-    <widget class="QWidget" name="tab_2">
-     <attribute name="title">
-      <string>Multiple Cards</string>
-     </attribute>
-    </widget>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>600</x>
-      <y>512</y>
-      <width>204</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">border: 1px solid black;
+     <widget class="QPushButton" name="pushButton">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>250</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid black;
 border-radius: 5;
 color: black;
 background-color: rgb(217, 197, 126);
@@ -229,10 +252,188 @@ QPushButton::hover {
 	
 	background-color: rgb(255, 85, 255);
 }</string>
-    </property>
-    <property name="text">
-     <string>Add</string>
-    </property>
+      </property>
+      <property name="text">
+       <string>Add</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="returnButtonSingle">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>250</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid black;
+border-radius: 5;
+color: black;
+background-color: rgb(217, 197, 126);
+
+QPushButton::hover {
+	
+	background-color: rgb(255, 85, 255);
+}</string>
+      </property>
+      <property name="text">
+       <string>Return</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Multiple Cards</string>
+     </attribute>
+     <widget class="QComboBox" name="comboBox">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>20</y>
+        <width>401</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift Light</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 252, 226);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Franchise</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>60</y>
+        <width>401</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift Light</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 252, 226);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Set</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>100</y>
+        <width>401</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift Light</family>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 252, 226);</string>
+      </property>
+      <property name="placeholderText">
+       <string>Number</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="returnButtonMultiple">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>290</y>
+        <width>191</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid black;
+border-radius: 5;
+color: black;
+background-color: rgb(217, 197, 126);
+
+QPushButton::hover {
+	
+	background-color: rgb(255, 85, 255);
+}</string>
+      </property>
+      <property name="text">
+       <string>Return</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_4">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>290</y>
+        <width>191</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 1px solid black;
+border-radius: 5;
+color: black;
+background-color: rgb(217, 197, 126);
+
+QPushButton::hover {
+	
+	background-color: rgb(255, 85, 255);
+}</string>
+      </property>
+      <property name="text">
+       <string>Add</string>
+      </property>
+     </widget>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>140</y>
+        <width>401</width>
+        <height>141</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 252, 226);
+border-color: rgb(184, 179, 132);</string>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>399</width>
+         <height>139</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </widget>
    </widget>
   </widget>
  </widget>

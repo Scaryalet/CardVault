@@ -1,4 +1,5 @@
 #include "userhome.h"
+#include "qsqlquery.h"
 #include "ui_userhome.h"
 #include "addset.h"
 #include "addcard.h"
@@ -6,6 +7,7 @@
 #include "flowlayout.h"
 #include <QPushButton>
 #include <QListWidget>
+#include "addset.h"
 
 UserHome::UserHome(QWidget *parent) :
     QMainWindow(parent),
@@ -13,14 +15,21 @@ UserHome::UserHome(QWidget *parent) :
 {
     ui->setupUi(this);
     setsCombo = ui->setsCombo;
+    setsList = ui->setsList;
+    // styling for setsList
+    ui->setsList->setStyleSheet("line-height: 20px;");
+
     flowLayout = new FlowLayout;
     flowLayout->setGeometry(QRect(0,0,750,300));
 
     connect(ui->setsCombo, &QComboBox::currentTextChanged, this, &UserHome::showUsersSets);
     connect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::showSetCards);
+    connect(ui->userNewSet, &QPushButton::clicked, this, &UserHome::userAddSet);
+    connect(ui->userNewCard, &QPushButton::clicked, this, &UserHome::userAddCard);
+    connect(ui->exitButton, &QPushButton::clicked, this, &UserHome::handleExit);
+
 
     showFranchiseNames();
-
 
 }
 
@@ -48,43 +57,45 @@ void UserHome::showFranchiseNames()
     }
 }
 
-void UserHome::on_pushButton_clicked()
+void UserHome::userAddSet()
 {
-    AddSet* addSet = new class AddSet;
-    addSet->show();
+    addSetWindow = new class AddSet;
+    addSetWindow->show();
+
+    // runs when signal is caught from AddSet
+    connect(addSetWindow, &AddSet::setAdded, this, &UserHome::addSet);
 
 }
 
 
-void UserHome::on_pushButton_2_clicked()
+void UserHome::userAddCard()
 {
     AddCard* addCard = new class AddCard;
-    setCentralWidget(addCard);
+    addCard->show();
 }
 
 void UserHome::showUsersSets(){
 
-    if(ui->setsCombo->currentText() == "Pokemon"){
-        qDebug() << "before clear";
-        QListWidgetItem *it = ui->setsList->takeItem(ui->setsList->currentRow());
-        delete it;
-//        ui->setsList->clear();
-        qDebug() << "after clear";
+    // disconnect slot to avoid crashes
+    disconnect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::showSetCards);
 
-        ui->setsList->addItem("Base Set");
-        ui->setsList->addItem("2022 McDonalds");
+    QString selectedFranchise = setsCombo->currentText();
 
+    // Clear the list widget before adding new items.
+    setsList->clear();
 
+    // Loop through the LoggedInUser->AllSets vector to find sets matching the selected franchise.
+    for (const Set& set : LoggedInUser->AllSets) {
+        if (set.franchiseName == selectedFranchise) {
+            // Add the set name to the QListWidget.
+            setsList->addItem(set.setName);
+        }
     }
-    if(ui->setsCombo->currentText() == "Yu-Gi-Oh!"){
-        QListWidgetItem *it = ui->setsList->takeItem(ui->setsList->currentRow());
-        delete it;
-//        ui->setsList->clear();
-        ui->setsList->addItem("Legend of Blue Eyes White Dragon");
-        ui->setsList->addItem("Metal Raiders");
 
 
-    }
+
+
+
 
 }
 
@@ -132,3 +143,44 @@ void UserHome::clearLayout(QLayout *layout) {
     }
 }
 
+void UserHome::addSet(const QString& setName){ //
+
+    QSqlQuery q1;
+
+    // select all from sets table
+    q1.exec("SELECT * FROM SETS");
+    while(q1.next()){
+        // if set name matches chosen set from list
+        if(setName == q1.value(1).toString()){
+            // set 'Set' object (declared in header file) to set info from DB
+            s1.franchiseName=q1.value(0).toString();
+            s1.setName = q1.value(1).toString();
+            s1.setId = q1.value(2).toInt();
+            s1.numberOfCards = q1.value(3).toInt();
+            // push back to users allsets vector
+            LoggedInUser->AllSets.push_back(s1);
+            // insert into UserSets DB
+            q1.prepare("INSERT INTO UserSets (Username,  SetName, SetID, Franchise)"
+                       "VALUES (:username, :setName, :setID, :franchise)");
+            q1.bindValue(":username", LoggedInUser->name);
+            q1.bindValue(":franchise", s1.franchiseName);
+
+            q1.bindValue(":setName", s1.setName);
+
+            q1.bindValue(":setID", s1.setId);
+
+            q1.exec();
+
+
+        }
+    }
+    showFranchiseNames();
+}
+void UserHome::handleExit(){
+    LoginRegister *newLoginScreen = new class LoginRegister;
+    setCentralWidget(newLoginScreen);
+    delete LoggedInUser;
+    db.close();
+
+
+}

@@ -29,17 +29,46 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">QComboBox {
+    border: 1px solid #B8B384;
+    border-radius: 3px;
+    padding: 1px 18px 1px 3px;
+    min-width: 6em;
+	text-align: center;
+	background-color: rgb(255, 252, 226);
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+
+   
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 3px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 3px;
+}
+
+QComboBox::down-arrow {
+    image: url(:/img/down-filled-triangular-arrow.png);
+	width: 15px;
+	right: 5px
+	
+}
+
+QComboBox::down-arrow:on { /* shift the arrow when popup is open */
+    image: url(:/img/up-filled-triangular-arrow.png);
+	width: 15px;
+	right: 5px
+}
+
+
+
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="styleSheet">
-    <string notr="true">QPushButton {
-	
-	background-color: rgb(255, 255, 255);
-}
-QComboBox {
-	background-color: rgb(217, 197, 126);
-}</string>
+    <string notr="true"/>
    </property>
    <widget class="QFrame" name="frame">
     <property name="geometry">
@@ -84,7 +113,7 @@ QComboBox {
      <property name="font">
       <font>
        <family>Bahnschrift Light</family>
-       <pointsize>10</pointsize>
+       <pointsize>11</pointsize>
       </font>
      </property>
      <property name="styleSheet">
@@ -93,11 +122,6 @@ QComboBox {
      <item>
       <property name="text">
        <string>Franchise:</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Pokemon</string>
       </property>
      </item>
     </widget>
@@ -110,6 +134,12 @@ QComboBox {
        <height>431</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <family>Bahnschrift Light</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
      <property name="styleSheet">
       <string notr="true"/>
      </property>
@@ -119,6 +149,38 @@ QComboBox {
      <property name="verticalScrollBarPolicy">
       <enum>Qt::ScrollBarAsNeeded</enum>
      </property>
+     <property name="gridSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="exitButton">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>670</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Bahnschrift</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(217, 197, 126);
+border: 1px solid #A79865;
+border-bottom: 2px solid #A79865;
+border-right: 2px solid #A79865;
+border-radius: 4px;</string>
+     </property>
+     <property name="text">
+      <string>Exit</string>
+     </property>
     </widget>
    </widget>
    <widget class="QFrame" name="frame_2">
@@ -126,12 +188,16 @@ QComboBox {
      <rect>
       <x>210</x>
       <y>20</y>
-      <width>1070</width>
+      <width>1081</width>
       <height>120</height>
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: #d9c57e;</string>
+     <string notr="true">background-color: #d9c57e;
+border: 1px solid #b8b384;
+border-bottom: 2px solid #b8b384;
+border-right: 2px solid #b8b384;
+</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -139,13 +205,13 @@ QComboBox {
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QComboBox" name="comboBox_3">
+    <widget class="QComboBox" name="filterCombo">
      <property name="geometry">
       <rect>
-       <x>730</x>
-       <y>40</y>
+       <x>720</x>
+       <y>39</y>
        <width>300</width>
-       <height>30</height>
+       <height>41</height>
       </rect>
      </property>
      <property name="font">
@@ -158,7 +224,8 @@ QComboBox {
       <bool>false</bool>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
+      <string notr="true">background-color: rgb(255, 252, 226);
+border-color: rgb(184, 179, 132);</string>
      </property>
      <property name="editable">
       <bool>false</bool>
@@ -173,13 +240,13 @@ QComboBox {
       <string>Sort/Filter</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="userNewSet">
      <property name="geometry">
       <rect>
-       <x>32</x>
-       <y>40</y>
+       <x>40</x>
+       <y>39</y>
        <width>300</width>
-       <height>30</height>
+       <height>41</height>
       </rect>
      </property>
      <property name="font">
@@ -189,19 +256,22 @@ QComboBox {
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 252, 226);</string>
+      <string notr="true">background-color: rgb(255, 252, 226);
+border-radius: 4px;
+
+</string>
      </property>
      <property name="text">
       <string>Add New Set</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_2">
+    <widget class="QPushButton" name="userNewCard">
      <property name="geometry">
       <rect>
        <x>380</x>
-       <y>40</y>
+       <y>39</y>
        <width>300</width>
-       <height>30</height>
+       <height>41</height>
       </rect>
      </property>
      <property name="font">
@@ -211,7 +281,9 @@ QComboBox {
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 255, 255);</string>
+      <string notr="true">background-color: rgb(255, 252, 226);
+border-color: rgb(184, 179, 132);
+border-radius: 4px</string>
      </property>
      <property name="text">
       <string>Add New Card</string>
@@ -228,7 +300,8 @@ QComboBox {
      </rect>
     </property>
     <property name="styleSheet">
-     <string notr="true">background-color: rgb(250, 250, 250);</string>
+     <string notr="true">background-color: rgb(250, 250, 250);
+</string>
     </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
@@ -245,6 +318,9 @@ QComboBox {
        <height>491</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">border: 1px solid;</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -256,8 +332,8 @@ QComboBox {
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>981</width>
-        <height>491</height>
+        <width>979</width>
+        <height>489</height>
        </rect>
       </property>
      </widget>

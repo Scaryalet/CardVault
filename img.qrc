@@ -16,5 +16,7 @@
         <file>2022/013.png</file>
         <file>2022/014.png</file>
         <file>2022/015.png</file>
+        <file>down-filled-triangular-arrow.png</file>
+        <file>up-filled-triangular-arrow.png</file>
     </qresource>
 </RCC>

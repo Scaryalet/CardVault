@@ -18,7 +18,7 @@ public:
     QSqlDatabase db;
     int tempId, tempNum;
     QString tempName;
-    Set s1;
+
 
 
 public slots:
@@ -26,6 +26,11 @@ public slots:
 private:
     Ui::AddSet *ui;
 
+signals:
+    void setAdded(QString);
+
+private slots:
+    void on_returnButton_clicked();
 };
 
 #endif // ADDSET_H
