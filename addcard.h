@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QWindow>
+#include "loginregister.h"
 
 namespace Ui {
 class AddCard;
@@ -16,14 +17,7 @@ public:
     explicit AddCard(QWidget *parent = nullptr);
     ~AddCard();
     QString imageURL;
-    struct SelectedCard {
-        QString name;
-        QString set;
-        int number;
-        QString rarity;
-        QString imgURL;
-    };
-    SelectedCard *userSelectedCard;
+    Card userSelectedCard;
 
 public slots:
     void showSets();
@@ -35,6 +29,8 @@ private slots:
     void addCardSingle();
 private:
     Ui::AddCard *ui;
+signals:
+    void singleCardToAdd(Card);
 };
 
 #endif // ADDCARD_H

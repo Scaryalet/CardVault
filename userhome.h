@@ -2,6 +2,7 @@
 #define USERHOME_H
 
 #include <QMainWindow>
+#include "addcard.h"
 #include "addset.h"
 #include "flowlayout.h"
 #include "qcombobox.h"
@@ -58,6 +59,7 @@ public:
     ~UserHome();
     FlowLayout *flowLayout;
     AddSet* addSetWindow;
+    AddCard* addCardWindow;
     Set s1;
 public slots:
 
@@ -71,8 +73,8 @@ private slots:
     void populateSet2022McDonalds();
     void userAddCard();
     void userAddSet();
-
     void handleExit();
+    void addCard(const Card& userSelectedCard);
 
 private:
     Ui::UserHome *ui;

@@ -32,7 +32,7 @@ struct Card {
     int cardNumber;
     QString rarity;
     QString setName;
-    bool collected;
+    QString imgURL;
 };
 
 struct Set {

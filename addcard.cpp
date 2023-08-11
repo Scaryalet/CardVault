@@ -2,7 +2,6 @@
 #include "ui_addcard.h"
 #include <QVector>
 #include <QComboBox>
-#include "userhome.h"
 #include <QSqlQuery>
 #include <QMessageBox>
 
@@ -12,7 +11,7 @@ AddCard::AddCard(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    userSelectedCard = new SelectedCard;
+
     showFranchises();
 
     //signals
@@ -63,13 +62,14 @@ void AddCard::showImage(){
     q2.exec("SELECT * FROM Cards");
     while(q2.next()){
         if(q2.value(0).toString() == selectedCard && selectedSet == q2.value(1).toString()){
-            userSelectedCard->name = q2.value(0).toString();
-            userSelectedCard->number = q2.value(3).toInt();
-            userSelectedCard->set = q2.value(1).toString();
-            userSelectedCard->imgURL = q2.value(5).toString();
+            userSelectedCard.cardName = q2.value(0).toString();
+            userSelectedCard.cardNumber = q2.value(3).toInt();
+            userSelectedCard.setName = q2.value(1).toString();
+            userSelectedCard.rarity = q2.value(4) .toString();
+            userSelectedCard.imgURL = q2.value(5).toString();
         }
     }
-    ui->cardImage->setStyleSheet("border-image: url(" + userSelectedCard->imgURL + ");");
+    ui->cardImage->setStyleSheet("border-image: url(" + userSelectedCard.imgURL + ");");
 }
 
 void AddCard::handleReturn(){
@@ -106,21 +106,13 @@ void AddCard::showFranchises(){
 
 void AddCard::addCardSingle(){
 
-    //
-    QSqlQuery q3;
-    q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL, CardRarity)"
-               "VALUES (:username, :cardname, :setname, :imageurl, :cardrarity)");
-    q3.bindValue(":username", LoggedInUser->name);
-    q3.bindValue(":cardname", userSelectedCard->name);
-    q3.bindValue(":setname", userSelectedCard->set);
-    q3.bindValue(":imageurl", userSelectedCard->imgURL);
-    q3.bindValue(":cardrarity", "common");
+    QMessageBox::information(this, "Card Added!", userSelectedCard.cardName + " added to your portfolio!");
+    emit singleCardToAdd(userSelectedCard);
 
-    q3.exec();
-    QMessageBox::information(this, "Card Added!", userSelectedCard->name + " added to your portfolio!");
     this->close();
 
     // WE NEED TO CHECK IF THE USER OWNS THE SET ALREADY, AND IF NOT WE NEED TO ADD TO USERS SETS.
+
 }
 
 

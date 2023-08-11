@@ -45,12 +45,9 @@ AddSet::~AddSet()
 }
 
 void AddSet::addSet(){
-    qDebug() << "before set text";
     QString setName = ui->listWidget->currentItem()->text(); // temp string to hold selected set name
-    qDebug() << "before signal";
     // emit a signal with setName that will be caught on UserHome
     emit setAdded(setName);
-    qDebug() << "signal emmited";
     this->close();
 
 }

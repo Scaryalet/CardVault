@@ -126,8 +126,9 @@ void UserHome::userAddSet()
 
 void UserHome::userAddCard()
 {
-    AddCard* addCard = new class AddCard;
-    addCard->show();
+    addCardWindow = new class AddCard;
+    addCardWindow->show();
+    connect(addCardWindow, &AddCard::singleCardToAdd, this, &UserHome::addCard);
 }
 
 void UserHome::showUsersSets(){
@@ -226,16 +227,16 @@ void UserHome::addSet(const QString& setName){ //
             s1.setName = q1.value(1).toString();
             s1.setId = q1.value(2).toInt();
             s1.numberOfCards = q1.value(3).toInt();
+
             // push back to users allsets vector
             LoggedInUser->AllSets.push_back(s1);
+
             // insert into UserSets DB
             q1.prepare("INSERT INTO UserSets (Username,  SetName, SetID, Franchise)"
                        "VALUES (:username, :setName, :setID, :franchise)");
             q1.bindValue(":username", LoggedInUser->name);
             q1.bindValue(":franchise", s1.franchiseName);
-
             q1.bindValue(":setName", s1.setName);
-
             q1.bindValue(":setID", s1.setId);
 
             q1.exec();
@@ -243,7 +244,20 @@ void UserHome::addSet(const QString& setName){ //
     }
     showFranchiseNames();
 }
-
+void UserHome::addCard(const Card& userSelectedCard) {
+    //
+    QSqlQuery q3;
+    q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL, CardRarity)"
+               "VALUES (:username, :cardname, :setname, :imageurl, :cardrarity)");
+    q3.bindValue(":username", LoggedInUser->name);
+    q3.bindValue(":cardname", userSelectedCard.cardName);
+    q3.bindValue(":setname", userSelectedCard.setName);
+    q3.bindValue(":imageurl", userSelectedCard.imgURL);
+    q3.bindValue(":cardrarity", "common");
+    q3.exec();
+    LoggedInUser->AllCards.push_back(userSelectedCard);
+    populateTheCards();
+}
 void UserHome::handleExit(){
     LoginRegister *newLoginScreen = new class LoginRegister;
     setCentralWidget(newLoginScreen);
