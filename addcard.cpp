@@ -12,12 +12,6 @@ AddCard::AddCard(QWidget *parent) :
 {
     ui->setupUi(this);
 
-
-
-
-
-
-
     userSelectedCard = new SelectedCard;
     showFranchises();
 
@@ -28,10 +22,6 @@ AddCard::AddCard(QWidget *parent) :
     connect(ui->returnButtonMultiple, &QPushButton::clicked, this, &AddCard::handleReturn);
     connect(ui->returnButtonSingle, &QPushButton::clicked, this, &AddCard::handleReturn);
     connect(ui->addCardButton, &QPushButton::clicked, this, &AddCard::addCardSingle);
-
-
-
-
 
 
 }
@@ -51,9 +41,8 @@ void AddCard::showSets(){
             ui->setCombo->addItem(q1.value(1).toString());
         }
     }
-
-
 }
+
 void AddCard::showNumbers(){
     QString selectedSet = ui->setCombo->currentText();
     ui->numberCombo->clear();
@@ -64,9 +53,8 @@ void AddCard::showNumbers(){
             ui->numberCombo->addItem(q1.value(0).toString());
         }
     }
-
-
 }
+
 void AddCard::showImage(){
     QString selectedSet = ui->setCombo->currentText();
     QString selectedCard = ui->numberCombo->currentText();
@@ -86,8 +74,8 @@ void AddCard::showImage(){
 
 void AddCard::handleReturn(){
     close();
-
 }
+
 void AddCard::showFranchises(){
 
     QVector <QString> AllSets;
@@ -118,19 +106,16 @@ void AddCard::showFranchises(){
 
 void AddCard::addCardSingle(){
 
-
-
-
-    // FIX THIS, UPDATE DATABASE TO MATCH COLUMNS!!!!
-
-
+    //
     QSqlQuery q3;
-    q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL)"
-               "VALUES (:username, :cardname, :setname, :imageurl)");
+    q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL, CardRarity)"
+               "VALUES (:username, :cardname, :setname, :imageurl, :cardrarity)");
     q3.bindValue(":username", LoggedInUser->name);
     q3.bindValue(":cardname", userSelectedCard->name);
     q3.bindValue(":setname", userSelectedCard->set);
     q3.bindValue(":imageurl", userSelectedCard->imgURL);
+    q3.bindValue(":cardrarity", "common");
+
     q3.exec();
     QMessageBox::information(this, "Card Added!", userSelectedCard->name + " added to your portfolio!");
     this->close();

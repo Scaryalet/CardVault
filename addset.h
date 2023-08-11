@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSqlDatabase>
 #include "loginregister.h"
+
 namespace Ui {
 class AddSet;
 }
@@ -18,6 +19,7 @@ public:
     QSqlDatabase db;
     int tempId, tempNum;
     QString tempName;
+
 
 
 

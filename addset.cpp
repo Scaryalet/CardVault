@@ -1,6 +1,7 @@
 #include "addset.h"
 #include "qsqlquery.h"
 #include "ui_addset.h"
+#include "userhome.h"
 #include <QPushButton>
 #include <QPushButton>
 
@@ -11,7 +12,6 @@ AddSet::AddSet(QWidget *parent) :
     ui->setupUi(this);
 //    setWindowTitle("Add New Set");
     setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-
 
 
     QSqlQuery q1;
@@ -29,18 +29,12 @@ AddSet::AddSet(QWidget *parent) :
                 break;
             }
         }
-
         // if the set is not owned, add it to the listWidget
         if (!setOwned) {
             ui->listWidget->addItem(setName);
         }
     }
-
-
-
-
     connect(ui->addSetButton, &QPushButton::clicked, this, &AddSet::addSet);
-
 }
 
 AddSet::~AddSet()
@@ -49,13 +43,15 @@ AddSet::~AddSet()
 
 
 }
+
 void AddSet::addSet(){
+    qDebug() << "before set text";
     QString setName = ui->listWidget->currentItem()->text(); // temp string to hold selected set name
+    qDebug() << "before signal";
     // emit a signal with setName that will be caught on UserHome
     emit setAdded(setName);
+    qDebug() << "signal emmited";
     this->close();
-
-
 
 }
 

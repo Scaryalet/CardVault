@@ -18,9 +18,9 @@ UserHome::UserHome(QWidget *parent) :
     setsCombo = ui->setsCombo;
     setsList = ui->setsList;
 
-
-    flowLayout = new FlowLayout;
+    flowLayout = new FlowLayout(-1, 45, 45);
     flowLayout->setGeometry(QRect(0,0,750,300));
+    flowLayout->setSpacing(80);
 
     connect(ui->setsCombo, &QComboBox::currentTextChanged, this, &UserHome::showUsersSets);
     connect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::populateTheCards);
@@ -38,7 +38,6 @@ UserHome::~UserHome()
     delete ui;
 }
 
-
 void UserHome::populateSet2022McDonalds()
 {
 
@@ -46,53 +45,59 @@ void UserHome::populateSet2022McDonalds()
     QString franchiseName = "Pokemon";
     int setID = 1;
     int numberOfCards = 15;
-
-    // Insert the set into the Sets table
     QSqlQuery q1;
-    q1.prepare("INSERT INTO Sets (Franchise, SetName, SetID, NumberOfCards) VALUES (:franchise, :setName, :setID, :NumberOfCards)");
-    q1.bindValue(":franchise", franchiseName);
-    q1.bindValue(":setName", setName);
-    q1.bindValue(":setID", setID);
-    q1.bindValue(":NumberOfCards", numberOfCards);
-    q1.exec();
 
-    // Add the set to the user's AllSets vector
-    Set s;
-    s.franchiseName = franchiseName;
-    s.setName = setName;
-    s.setId = 1;
-    s.numberOfCards = 15; // Total number of cards in the set
-    LoggedInUser->AllSets.push_back(s);
+    q1.exec("SELECT * FROM Sets");
+    bool maccasFound = false;
+    while(q1.next()){
+        if(q1.value(0) == "Pokemon" && q1.value(1) == "2022 McDonalds"){
+            maccasFound = true;
+            break;
+        }
+    }
+    if(!maccasFound){
+        // Insert the set into the Sets table
 
-    // Insert the card details into the Cards table
-    QSqlQuery q2;
+        q1.prepare("INSERT INTO Sets (Franchise, SetName, SetID, NumberOfCards) VALUES (:franchise, :setName, :setID, :NumberOfCards)");
+        q1.bindValue(":franchise", franchiseName);
+        q1.bindValue(":setName", setName);
+        q1.bindValue(":setID", setID);
+        q1.bindValue(":NumberOfCards", numberOfCards);
+        q1.exec();
 
-    for (int cardNumber = 1; cardNumber <= 15; ++cardNumber) {
-        QString cardRarity = "Common"; // Adjust the rarity as needed
-        //Input image url. cardNumber is the value of the card, 3 is the width of the string (if less than 10, two zeros go in front, less that 100, one zero)
-        //10 is the base of the number system and QLatin1Char('0') makes the character used for padding a 0.
-        QString imageURL = QString(":/img/2022/%1.png").arg(cardNumber, 3, 10, QLatin1Char('0'));
 
-        q2.prepare("INSERT INTO Cards (CardName, SetName, CardID, CardNumber, CardRarity, ImageURL) "
-                   "VALUES (:cardName, :setName, :cardID, :cardNumber, :cardRarity, :imageURL)");
+        // Insert the card details into the Cards table
+        QSqlQuery q2;
 
-        q2.bindValue(":cardName", cardNumber);
-        q2.bindValue(":cardID", cardNumber);
-        q2.bindValue(":cardNumber", cardNumber);
-        q2.bindValue(":cardRarity", cardRarity);
-        q2.bindValue(":imageURL", imageURL);
+        for (int cardNumber = 1; cardNumber <= 15; ++cardNumber) {
+            QString cardRarity = "Common"; // Adjust the rarity as needed
+            //Input image url. cardNumber is the value of the card, 3 is the width of the string (if less than 10, two zeros go in front, less that 100, one zero)
+            //10 is the base of the number system and QLatin1Char('0') makes the character used for padding a 0.
+            QString imageURL = QString(":/img/2022/%1.png").arg(cardNumber, 3, 10, QLatin1Char('0'));
 
-        q2.bindValue(":setName", setName);
+            q2.prepare("INSERT INTO Cards (CardName, SetName, CardID, CardNumber, CardRarity, ImageURL) "
+                       "VALUES (:cardName, :setName, :cardID, :cardNumber, :cardRarity, :imageURL)");
 
-        q2.exec();
+            q2.bindValue(":cardName", cardNumber);
+            q2.bindValue(":cardID", cardNumber);
+            q2.bindValue(":cardNumber", cardNumber);
+            q2.bindValue(":cardRarity", cardRarity);
+            q2.bindValue(":imageURL", imageURL);
 
+            q2.bindValue(":setName", setName);
+
+            q2.exec();
+
+
+        }
 
     }
 
 
 
-}
 
+
+}
 
 void UserHome::showFranchiseNames()
 {
@@ -104,33 +109,26 @@ void UserHome::showFranchiseNames()
         uniqueFranchises.insert(set.franchiseName);
     }
 
-//    // Clear the combo box before adding new items.
-//    setsCombo->clear();
-
     // Add unique franchise names to the combo box
     for (const QString& franchiseName : uniqueFranchises) {
         setsCombo->addItem(franchiseName);
     }
 }
 
-
 void UserHome::userAddSet()
 {
     addSetWindow = new class AddSet;
     addSetWindow->show();
-
     // runs when signal is caught from AddSet
     connect(addSetWindow, &AddSet::setAdded, this, &UserHome::addSet);
 
 }
-
 
 void UserHome::userAddCard()
 {
     AddCard* addCard = new class AddCard;
     addCard->show();
 }
-
 
 void UserHome::showUsersSets(){
 
@@ -152,9 +150,6 @@ void UserHome::showUsersSets(){
 
 }
 
-
-
-
 void UserHome::populateTheCards(){
     clearLayout(flowLayout);
     QString selectedSet = ui->setsList->currentItem()->text();
@@ -166,13 +161,35 @@ void UserHome::populateTheCards(){
 
     //Creates card button with image of cards.
     while (q1.next()) {
-        QPushButton* cardButton = new QPushButton;
-        cardButton->setStyleSheet("border: 1px solid black;"
-                                  "width: 150px;"
-                                  "height: 200px;"
-                                  "border-image: url(" + q1.value(5).toString() + ");"
-                                                             "margin: 20px;");
-        flowLayout->addWidget(cardButton);
+        bool cardExists = false;
+        for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
+            if(q1.value(0).toString() == LoggedInUser->AllCards[i].cardName){ // add setName to AllCards Vector
+                cardExists = true;
+                break;
+            }
+        }
+
+        //If statement to set opacity depending on card ownership
+        if(!cardExists){
+            QString cardURL = q1.value(5).toString();
+            QString buttonStyleSheet =  "width: 180px;"
+                                        "height: 240px;"
+                                        "border: none;"
+                                        "outline: none;";
+            CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
+            cardButton->setFixedSize(180,240);
+            flowLayout->addWidget(cardButton);
+        }else {
+            QString cardURL = q1.value(5).toString();
+            QString buttonStyleSheet =  "width: 180px;"
+                                       "height: 240px;"
+                                       "border: none;"
+                                       "outline: none;";
+            CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
+            cardButton->setFixedSize(180,240);
+            flowLayout->addWidget(cardButton);
+        }
+
     }
 
     // Set the layout for the scroll area's contents
@@ -196,7 +213,7 @@ void UserHome::clearLayout(QLayout *layout) {
 }
 
 void UserHome::addSet(const QString& setName){ //
-
+    qDebug() << "addset";
     QSqlQuery q1;
 
     // select all from sets table
@@ -222,12 +239,11 @@ void UserHome::addSet(const QString& setName){ //
             q1.bindValue(":setID", s1.setId);
 
             q1.exec();
-
-
         }
     }
     showFranchiseNames();
 }
+
 void UserHome::handleExit(){
     LoginRegister *newLoginScreen = new class LoginRegister;
     setCentralWidget(newLoginScreen);
