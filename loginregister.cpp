@@ -14,7 +14,7 @@ LoginRegister::LoginRegister(QWidget *parent)
     // database connection
 
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("pokemon.db");
+    db.setDatabaseName("database.db");
     db.open();
 }
 
