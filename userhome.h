@@ -2,14 +2,53 @@
 #define USERHOME_H
 
 #include <QMainWindow>
+#include "addcard.h"
 #include "addset.h"
 #include "flowlayout.h"
 #include "qcombobox.h"
 #include "qlistwidget.h"
+#include <QWidget>
+#include <QPainter>
+#include <QPushButton>
 
 namespace Ui {
 class UserHome;
 }
+
+
+
+
+class CustomButton : public QPushButton {
+public:
+    CustomButton(const QString& text, const QString& imagePath, qreal opacity, const QString& buttonStyleSheet, QWidget* parent = nullptr)
+        : QPushButton(text, parent), imagePath(imagePath), buttonOpacity(opacity) {
+        setStyleSheet(buttonStyleSheet);
+        pixmap.load(imagePath);
+        if (pixmap.isNull()) {
+            qDebug() << "Failed to load image:" << imagePath;
+        }
+    }
+
+protected:
+    void paintEvent(QPaintEvent* event) override {
+        QPushButton::paintEvent(event);
+
+        if (!pixmap.isNull()) {
+            QPainter painter(this);
+            painter.setRenderHint(QPainter::Antialiasing);
+
+            QPixmap scaledPixmap = pixmap.scaled(size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            painter.setOpacity(buttonOpacity); // Set the opacity based on the button's ownership status
+            painter.drawPixmap(rect(), scaledPixmap);
+        }
+    }
+
+private:
+    QString imagePath;
+    QPixmap pixmap;
+    qreal buttonOpacity;
+};
+
 
 class UserHome : public QMainWindow
 {
@@ -20,23 +59,22 @@ public:
     ~UserHome();
     FlowLayout *flowLayout;
     AddSet* addSetWindow;
+    AddCard* addCardWindow;
     Set s1;
-
 public slots:
 
 
 private slots:
     void showFranchiseNames();
     void showUsersSets();
-    void showSetCards();
     void clearLayout(QLayout *layout);
     void addSet(const QString& setName);
-    void populateTheCards(const QString& selectedSet);
+    void populateTheCards();
     void populateSet2022McDonalds();
     void userAddCard();
     void userAddSet();
-
     void handleExit();
+    void addCard(const Card& userSelectedCard);
 
 private:
     Ui::UserHome *ui;

@@ -16,26 +16,23 @@ public:
     LoginRegister(QWidget *parent = nullptr);
     ~LoginRegister();
 
-
-
-
-
-
 private slots:
     void on_loginButton_clicked();
 
     void on_registerButton_clicked();
 
-
 private:
     Ui::LoginRegister *ui;
 };
+
+
 struct Card {
     QString cardName;
     int cardID;
     int cardNumber;
     QString rarity;
-    bool collected;
+    QString setName;
+    QString imgURL;
 };
 
 struct Set {
@@ -43,15 +40,14 @@ struct Set {
     int setId;
     QString setName;
     int numberOfCards;
-
 };
+
 struct CurrentUser {
     QString name;
     QVector <Card> AllCards;
     QVector <Set> AllSets;
-
-
 };
+
 inline CurrentUser *LoggedInUser = new CurrentUser;
 inline QSqlDatabase db;
 

@@ -154,7 +154,7 @@ border-radius: 5</string>
        <enum>QFrame::Raised</enum>
       </property>
      </widget>
-     <widget class="QComboBox" name="sNumberCombo">
+     <widget class="QComboBox" name="numberCombo">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -177,7 +177,7 @@ border-radius: 5</string>
        <string>Number</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="sSetCombo">
+     <widget class="QComboBox" name="setCombo">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -199,7 +199,7 @@ border-radius: 5</string>
        <string>Set</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="sFranchiseCombo">
+     <widget class="QComboBox" name="franchiseCombo">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -233,9 +233,7 @@ border-radius: 5</string>
        <string>Franchise</string>
       </property>
      </widget>
-
      <widget class="QPushButton" name="addCardButton">
-
       <property name="geometry">
        <rect>
         <x>310</x>
@@ -265,7 +263,7 @@ QPushButton::hover {
        <string>Add</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="sReturnButton">
+     <widget class="QPushButton" name="returnButtonSingle">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -300,9 +298,7 @@ QPushButton::hover {
      <attribute name="title">
       <string>Multiple Cards</string>
      </attribute>
-
      <widget class="QComboBox" name="franchiseComboMultiple">
-
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -324,9 +320,7 @@ QPushButton::hover {
        <string>Franchise</string>
       </property>
      </widget>
-
      <widget class="QComboBox" name="setCombo_2">
-
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -370,7 +364,7 @@ QPushButton::hover {
        <string>Number</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="mReturnButton">
+     <widget class="QPushButton" name="returnButtonMultiple">
       <property name="geometry">
        <rect>
         <x>0</x>
