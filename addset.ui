@@ -116,9 +116,9 @@ background-color: rgb(217, 197, 126);</string>
      <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>10</x>
         <y>10</y>
-        <width>241</width>
+        <width>1261</width>
         <height>61</height>
        </rect>
       </property>
@@ -143,10 +143,10 @@ background-color: rgb(217, 197, 126);</string>
     <widget class="QComboBox" name="comboBox">
      <property name="geometry">
       <rect>
-       <x>500</x>
-       <y>200</y>
-       <width>261</width>
-       <height>31</height>
+       <x>470</x>
+       <y>190</y>
+       <width>341</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="font">
@@ -172,9 +172,9 @@ background-color: rgb(217, 197, 126);</string>
     <widget class="QPushButton" name="returnButton">
      <property name="geometry">
       <rect>
-       <x>570</x>
-       <y>520</y>
-       <width>131</width>
+       <x>540</x>
+       <y>630</y>
+       <width>211</width>
        <height>31</height>
       </rect>
      </property>
@@ -197,10 +197,10 @@ border-right: 2px solid #9F9160;</string>
     <widget class="QListWidget" name="listWidget">
      <property name="geometry">
       <rect>
-       <x>500</x>
+       <x>470</x>
        <y>260</y>
-       <width>261</width>
-       <height>181</height>
+       <width>341</width>
+       <height>291</height>
       </rect>
      </property>
      <property name="font">
@@ -217,9 +217,9 @@ border: none;</string>
     <widget class="QPushButton" name="addSetButton">
      <property name="geometry">
       <rect>
-       <x>540</x>
-       <y>470</y>
-       <width>191</width>
+       <x>510</x>
+       <y>580</y>
+       <width>271</width>
        <height>41</height>
       </rect>
      </property>

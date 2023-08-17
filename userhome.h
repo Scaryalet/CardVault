@@ -16,8 +16,6 @@ class UserHome;
 }
 
 
-
-
 class CustomButton : public QPushButton {
 public:
     CustomButton(const QString& text, const QString& imagePath, qreal opacity, const QString& buttonStyleSheet, QWidget* parent = nullptr)
@@ -75,11 +73,13 @@ private slots:
     void userAddSet();
     void handleExit();
     void addCard(const Card& userSelectedCard);
+    void createFilterOptions(QComboBox* comboBox);
 
 private:
     Ui::UserHome *ui;
     QComboBox *setsCombo;
     QListWidget *setsList;
+    QComboBox *filterCombo;
 };
 
 #endif // USERHOME_H

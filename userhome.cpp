@@ -8,6 +8,8 @@
 #include <QPushButton>
 #include <QListWidget>
 #include "addset.h"
+#include <QtGui/QStandardItem>
+#include <QtGui/QStandardItemModel>
 
 UserHome::UserHome(QWidget *parent) :
     QMainWindow(parent),
@@ -15,27 +17,81 @@ UserHome::UserHome(QWidget *parent) :
 {
 
     ui->setupUi(this);
+
     setsCombo = ui->setsCombo;
     setsList = ui->setsList;
+    filterCombo = ui->filterCombo;
 
+    //Setting the flow layout
     flowLayout = new FlowLayout(-1, 45, 45);
     flowLayout->setGeometry(QRect(0,0,750,300));
     flowLayout->setSpacing(80);
 
+    //Connect signals with slots
     connect(ui->setsCombo, &QComboBox::currentTextChanged, this, &UserHome::showUsersSets);
     connect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::populateTheCards);
     connect(ui->userNewSet, &QPushButton::clicked, this, &UserHome::userAddSet);
     connect(ui->userNewCard, &QPushButton::clicked, this, &UserHome::userAddCard);
     connect(ui->exitButton, &QPushButton::clicked, this, &UserHome::handleExit);
 
+    //Functions that run when page loads
     populateSet2022McDonalds();
-    showFranchiseNames();
+    showFranchiseNames();    
+    createFilterOptions(filterCombo);
 
 }
 
 UserHome::~UserHome()
 {
     delete ui;
+}
+
+void UserHome::createFilterOptions(QComboBox* comboBox) {
+    QStandardItemModel* model = new QStandardItemModel(comboBox);
+
+    // Create the selectable items under headings
+    QStringList collectedItems = { "All Cards", "Cards Collected", "Cards Not Owned" };
+    QStringList rarityItems = { "Common", "Uncommon", "Rare", "Holo/Super Rare+" };
+
+    //Create Headings in ComboBox
+    QStandardItem* heading1 = new QStandardItem("Filter by Collected");
+    heading1->setSelectable(false);
+    heading1->setEditable(false);
+    QFont font = heading1->font();
+    font.setBold(true);
+    heading1->setFont(font);
+
+    model->appendRow(heading1);
+
+
+    //Add items under heading
+    for (const QString& itemText : collectedItems) {
+        QStandardItem* item = new QStandardItem(itemText);
+        QFont font = item->font();
+        font.setWeight(QFont::Light);
+        item->setFont(font);
+        model->appendRow(item);
+
+    }
+
+    //Create Headding 2 in ComboBox
+    QStandardItem* heading2 = new QStandardItem("Filter by Rarity");
+    heading2->setSelectable(false);
+    heading2->setEditable(false);
+    heading2->setFont(font);
+
+    model->appendRow(heading2);
+
+    //Add items under heading
+    for (const QString& itemText : rarityItems) {
+        QStandardItem* item = new QStandardItem(itemText);
+        QFont font = item->font();
+        font.setWeight(QFont::Light);
+        item->setFont(font);
+        model->appendRow(item);
+    }
+
+    comboBox->setModel(model);
 }
 
 void UserHome::populateSet2022McDonalds()
@@ -153,14 +209,17 @@ void UserHome::showUsersSets(){
 
 void UserHome::populateTheCards(){
     clearLayout(flowLayout);
+
     QString selectedSet = ui->setsList->currentItem()->text();
+//    int selectedOption = filterCombo->currentIndex();
+
     //Searches database for cards from selected set.
     QSqlQuery q1;
     q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
     q1.bindValue(":selectedSet", selectedSet);
     q1.exec();
 
-    //Creates card button with image of cards.
+
     while (q1.next()) {
         bool cardExists = false;
         for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
@@ -244,6 +303,7 @@ void UserHome::addSet(const QString& setName){ //
     }
     showFranchiseNames();
 }
+
 void UserHome::addCard(const Card& userSelectedCard) {
     //
     QSqlQuery q3;
@@ -258,6 +318,7 @@ void UserHome::addCard(const Card& userSelectedCard) {
     LoggedInUser->AllCards.push_back(userSelectedCard);
     populateTheCards();
 }
+
 void UserHome::handleExit(){
     LoginRegister *newLoginScreen = new class LoginRegister;
     setCentralWidget(newLoginScreen);
