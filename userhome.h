@@ -73,7 +73,6 @@ private slots:
     void userAddSet();
     void handleExit();
     void addCard(const Card& userSelectedCard);
-    void createFilterOptions(QComboBox* comboBox);
 
     void addMultipleCards(const QVector <Card> &CardsToAdd);
 private:
