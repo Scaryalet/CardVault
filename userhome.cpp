@@ -168,6 +168,10 @@ void UserHome::showUsersSets(){
 void UserHome::populateTheCards(){
     clearLayout(flowLayout);
     QString selectedSet;
+    QString buttonStyleSheet =  "width: 180px;"
+                               "height: 240px;"
+                               "border: none;"
+                               "outline: none;";
     if(ui->setsList->currentItem() != NULL){
         selectedSet = ui->setsList->currentItem()->text();
     }
@@ -191,26 +195,16 @@ void UserHome::populateTheCards(){
                 break;
             }
         }
-
-
         //default filter
         if(selectedOption == "" || selectedOption == "All"){
             //If statement to set opacity depending on card ownership
             if(!cardExists){
                 QString cardURL = q1.value(5).toString();
-                QString buttonStyleSheet =  "width: 180px;"
-                                           "height: 240px;"
-                                           "border: none;"
-                                           "outline: none;";
                 CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
                 cardButton->setFixedSize(180,240);
                 flowLayout->addWidget(cardButton);
             }else {
                 QString cardURL = q1.value(5).toString();
-                QString buttonStyleSheet =  "width: 180px;"
-                                           "height: 240px;"
-                                           "border: none;"
-                                           "outline: none;";
                 CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
                 cardButton->setFixedSize(180,240);
                 flowLayout->addWidget(cardButton);
@@ -220,10 +214,6 @@ void UserHome::populateTheCards(){
             //If statement to set opacity depending on card ownership
             if(cardExists){
                 QString cardURL = q1.value(5).toString();
-                QString buttonStyleSheet =  "width: 180px;"
-                                           "height: 240px;"
-                                           "border: none;"
-                                           "outline: none;";
                 CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
                 cardButton->setFixedSize(180,240);
                 flowLayout->addWidget(cardButton);
@@ -233,10 +223,6 @@ void UserHome::populateTheCards(){
             //If statement to set opacity depending on card ownership
             if(!cardExists){
                 QString cardURL = q1.value(5).toString();
-                QString buttonStyleSheet =  "width: 180px;"
-                                           "height: 240px;"
-                                           "border: none;"
-                                           "outline: none;";
                 CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
                 cardButton->setFixedSize(180,240);
                 flowLayout->addWidget(cardButton);
@@ -248,19 +234,11 @@ void UserHome::populateTheCards(){
                 //If statement to set opacity depending on card ownership
                 if(!cardExists){
                     QString cardURL = q1.value(5).toString();
-                    QString buttonStyleSheet =  "width: 180px;"
-                                               "height: 240px;"
-                                               "border: none;"
-                                               "outline: none;";
                     CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
                     cardButton->setFixedSize(180,240);
                     flowLayout->addWidget(cardButton);
                 }else {
                     QString cardURL = q1.value(5).toString();
-                    QString buttonStyleSheet =  "width: 180px;"
-                                               "height: 240px;"
-                                               "border: none;"
-                                               "outline: none;";
                     CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
                     cardButton->setFixedSize(180,240);
                     flowLayout->addWidget(cardButton);
@@ -272,19 +250,11 @@ void UserHome::populateTheCards(){
                 //If statement to set opacity depending on card ownership
                 if(!cardExists){
                     QString cardURL = q1.value(5).toString();
-                    QString buttonStyleSheet =  "width: 180px;"
-                                               "height: 240px;"
-                                               "border: none;"
-                                               "outline: none;";
                     CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
                     cardButton->setFixedSize(180,240);
                     flowLayout->addWidget(cardButton);
                 }else {
                     QString cardURL = q1.value(5).toString();
-                    QString buttonStyleSheet =  "width: 180px;"
-                                               "height: 240px;"
-                                               "border: none;"
-                                               "outline: none;";
                     CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
                     cardButton->setFixedSize(180,240);
                     flowLayout->addWidget(cardButton);
@@ -296,19 +266,11 @@ void UserHome::populateTheCards(){
                 //If statement to set opacity depending on card ownership
                 if(!cardExists){
                     QString cardURL = q1.value(5).toString();
-                    QString buttonStyleSheet =  "width: 180px;"
-                                               "height: 240px;"
-                                               "border: none;"
-                                               "outline: none;";
                     CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
                     cardButton->setFixedSize(180,240);
                     flowLayout->addWidget(cardButton);
                 }else {
                     QString cardURL = q1.value(5).toString();
-                    QString buttonStyleSheet =  "width: 180px;"
-                                               "height: 240px;"
-                                               "border: none;"
-                                               "outline: none;";
                     CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
                     cardButton->setFixedSize(180,240);
                     flowLayout->addWidget(cardButton);
@@ -320,19 +282,11 @@ void UserHome::populateTheCards(){
                 //If statement to set opacity depending on card ownership
                 if(!cardExists){
                     QString cardURL = q1.value(5).toString();
-                    QString buttonStyleSheet =  "width: 180px;"
-                                               "height: 240px;"
-                                               "border: none;"
-                                               "outline: none;";
                     CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
                     cardButton->setFixedSize(180,240);
                     flowLayout->addWidget(cardButton);
                 }else {
                     QString cardURL = q1.value(5).toString();
-                    QString buttonStyleSheet =  "width: 180px;"
-                                               "height: 240px;"
-                                               "border: none;"
-                                               "outline: none;";
                     CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
                     cardButton->setFixedSize(180,240);
                     flowLayout->addWidget(cardButton);
