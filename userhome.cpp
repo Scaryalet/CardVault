@@ -33,11 +33,14 @@ UserHome::UserHome(QWidget *parent) :
     connect(ui->userNewSet, &QPushButton::clicked, this, &UserHome::userAddSet);
     connect(ui->userNewCard, &QPushButton::clicked, this, &UserHome::userAddCard);
     connect(ui->exitButton, &QPushButton::clicked, this, &UserHome::handleExit);
+    //
+    connect(ui->filterCombo, &QComboBox::currentTextChanged, this, &UserHome::populateTheCards);
+    //
 
     //Functions that run when page loads
     populateSet2022McDonalds();
-    showFranchiseNames();    
-    createFilterOptions(filterCombo);
+    showFranchiseNames();
+//    createFilterOptions(filterCombo);
 
 }
 
@@ -46,53 +49,7 @@ UserHome::~UserHome()
     delete ui;
 }
 
-void UserHome::createFilterOptions(QComboBox* comboBox) {
-    QStandardItemModel* model = new QStandardItemModel(comboBox);
 
-    // Create the selectable items under headings
-    QStringList collectedItems = { "All Cards", "Cards Collected", "Cards Not Owned" };
-    QStringList rarityItems = { "Common", "Uncommon", "Rare", "Holo/Super Rare+" };
-
-    //Create Headings in ComboBox
-    QStandardItem* heading1 = new QStandardItem("Filter by Collected");
-    heading1->setSelectable(false);
-    heading1->setEditable(false);
-    QFont font = heading1->font();
-    font.setBold(true);
-    heading1->setFont(font);
-
-    model->appendRow(heading1);
-
-
-    //Add items under heading
-    for (const QString& itemText : collectedItems) {
-        QStandardItem* item = new QStandardItem(itemText);
-        QFont font = item->font();
-        font.setWeight(QFont::Light);
-        item->setFont(font);
-        model->appendRow(item);
-
-    }
-
-    //Create Headding 2 in ComboBox
-    QStandardItem* heading2 = new QStandardItem("Filter by Rarity");
-    heading2->setSelectable(false);
-    heading2->setEditable(false);
-    heading2->setFont(font);
-
-    model->appendRow(heading2);
-
-    //Add items under heading
-    for (const QString& itemText : rarityItems) {
-        QStandardItem* item = new QStandardItem(itemText);
-        QFont font = item->font();
-        font.setWeight(QFont::Light);
-        item->setFont(font);
-        model->appendRow(item);
-    }
-
-    comboBox->setModel(model);
-}
 
 void UserHome::populateSet2022McDonalds()
 {
@@ -185,6 +142,7 @@ void UserHome::userAddCard()
     addCardWindow = new class AddCard;
     addCardWindow->show();
     connect(addCardWindow, &AddCard::singleCardToAdd, this, &UserHome::addCard);
+    connect(addCardWindow, &AddCard::multipleCardsToAdd, this, &UserHome::addMultipleCards);
 }
 
 void UserHome::showUsersSets(){
@@ -207,54 +165,74 @@ void UserHome::showUsersSets(){
 
 }
 
-void UserHome::populateTheCards(){
+void UserHome::populateTheCards() {
     clearLayout(flowLayout);
+    QString selectedSet;
+    QString buttonStyleSheet = "width: 180px;"
+                               "height: 240px;"
+                               "border: none;"
+                               "outline: none;";
 
-    QString selectedSet = ui->setsList->currentItem()->text();
-//    int selectedOption = filterCombo->currentIndex();
+    if (ui->setsList->currentItem() != nullptr) {
+        selectedSet = ui->setsList->currentItem()->text();
+    }
 
-    //Searches database for cards from selected set.
+    QString selectedOption = filterCombo->currentText();
+    qDebug() << selectedOption;
+
     QSqlQuery q1;
     q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
     q1.bindValue(":selectedSet", selectedSet);
     q1.exec();
 
-
     while (q1.next()) {
-        bool cardExists = false;
-        for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
-            if(q1.value(0).toString() == LoggedInUser->AllCards[i].cardName){ // add setName to AllCards Vector
-                cardExists = true;
-                break;
-            }
-        }
+        bool cardExists = cardExistsInAllCards(q1.value(0).toString());
 
-        //If statement to set opacity depending on card ownership
-        if(!cardExists){
-            QString cardURL = q1.value(5).toString();
-            QString buttonStyleSheet =  "width: 180px;"
-                                        "height: 240px;"
-                                        "border: none;"
-                                        "outline: none;";
-            CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
-            cardButton->setFixedSize(180,240);
-            flowLayout->addWidget(cardButton);
-        }else {
-            QString cardURL = q1.value(5).toString();
-            QString buttonStyleSheet =  "width: 180px;"
-                                       "height: 240px;"
-                                       "border: none;"
-                                       "outline: none;";
-            CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
-            cardButton->setFixedSize(180,240);
+        QString cardURL = q1.value(5).toString();
+        double opacity = cardExists ? 1.0 : 0.3;
+        if (selectedOption == "Not Collected") {
+            opacity = 1.0; // Set opacity to 1.0 for all cards under "Not Collected" filter
+        }
+        if (shouldShowCard(q1, selectedOption)) {
+            CustomButton* cardButton = new CustomButton("", cardURL, opacity, buttonStyleSheet, this);
+            cardButton->setFixedSize(180, 240);
             flowLayout->addWidget(cardButton);
         }
-
     }
 
-    // Set the layout for the scroll area's contents
     ui->scrollAreaWidgetContents->setLayout(flowLayout);
-};
+}
+
+bool UserHome::cardExistsInAllCards(const QString& cardName) {
+    for (const auto& card : LoggedInUser->AllCards) {
+        if (card.cardName == cardName) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool UserHome::shouldShowCard(const QSqlQuery& query, const QString& selectedOption) {
+    QString rarity = query.value(4).toString();
+
+    if (selectedOption == "" || selectedOption == "All") {
+        return true;
+    } else if (selectedOption == "Collected") {
+        return cardExistsInAllCards(query.value(0).toString());
+    } else if (selectedOption == "Not Collected") {
+        return !cardExistsInAllCards(query.value(0).toString());
+    } else if (selectedOption == "Common") {
+        return rarity == "Common";
+    } else if (selectedOption == "Uncommon") {
+        return rarity == "Uncommon";
+    } else if (selectedOption == "Rare") {
+        return rarity == "Rare";
+    } else if (selectedOption == "Holo+") {
+        return rarity != "Common" && rarity != "Uncommon" && rarity != "Rare";
+    }
+    return false;
+}
+
 
 void UserHome::clearLayout(QLayout *layout) {
     if (layout == NULL)
@@ -317,6 +295,26 @@ void UserHome::addCard(const Card& userSelectedCard) {
     q3.exec();
     LoggedInUser->AllCards.push_back(userSelectedCard);
     populateTheCards();
+}
+void UserHome::addMultipleCards(const QVector<Card> &CardsToAdd) {
+    qDebug() << "Slot invoked with cards: " << CardsToAdd.size();
+    QSqlQuery q3;
+    for(int i = 0; i<CardsToAdd.size(); i++){
+        qDebug() << "entered loop";
+        q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL, CardRarity)"
+                   "VALUES (:username, :cardname, :setname, :imageurl, :cardrarity)");
+        q3.bindValue(":username", LoggedInUser->name);
+        q3.bindValue(":cardname", CardsToAdd[i].cardName);
+        q3.bindValue(":setname", CardsToAdd[i].setName);
+        q3.bindValue(":imageurl", CardsToAdd[i].imgURL);
+        q3.bindValue(":cardrarity", "common");
+        q3.exec();
+        LoggedInUser->AllCards.push_back(CardsToAdd[i]);
+
+
+    }
+    populateTheCards();
+
 }
 
 void UserHome::handleExit(){

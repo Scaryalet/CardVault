@@ -218,6 +218,41 @@ border-color: rgb(184, 179, 132);</string>
      <property name="placeholderText">
       <string>Sort/Filter</string>
      </property>
+     <item>
+      <property name="text">
+       <string>All</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Collected</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Not Collected</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Common</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Uncommon</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Rare</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Holo+</string>
+      </property>
+     </item>
     </widget>
     <widget class="QPushButton" name="userNewSet">
      <property name="geometry">
