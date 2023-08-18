@@ -16,11 +16,17 @@ AddCard::AddCard(QWidget *parent) :
 
     //signals
     connect(ui->franchiseCombo, &QComboBox::currentTextChanged, this, &AddCard::showSets);
+    connect(ui->franchiseComboMultiple, &QComboBox::currentTextChanged, this, &AddCard::showSetsMultiple);
     connect(ui->setCombo, &QComboBox::currentTextChanged, this, &AddCard::showNumbers);
+    connect(ui->setComboMultiple, &QComboBox::currentTextChanged, this, &AddCard::showNumbersMultiple);
     connect(ui->numberCombo, &QComboBox::currentTextChanged, this, &AddCard::showImage);
+    connect(ui->numberComboMultiple, &QComboBox::currentTextChanged, this, &AddCard::showImageMultiple);
     connect(ui->returnButtonMultiple, &QPushButton::clicked, this, &AddCard::handleReturn);
     connect(ui->returnButtonSingle, &QPushButton::clicked, this, &AddCard::handleReturn);
     connect(ui->addCardButton, &QPushButton::clicked, this, &AddCard::addCardSingle);
+    connect(ui->addIndividuaButton, &QPushButton::clicked, this, &AddCard::addCardToListMultiple);
+    connect(ui->displayCardsMultiple, &QListWidget::currentItemChanged, this, &AddCard::showCardFromListMultiple);
+    connect(ui->addCardButtonMultiple, &QPushButton::clicked, this, &AddCard::addCardMultiple);
 
 
 }
@@ -38,6 +44,20 @@ void AddCard::showSets(){
     while(q1.next()){
         if(q1.value(0) == selectedFranchise){
             ui->setCombo->addItem(q1.value(1).toString());
+
+        }
+    }
+}
+void AddCard::showSetsMultiple(){
+    QString selectedFranchise = ui->franchiseComboMultiple->currentText();
+    ui->setComboMultiple->clear();
+    ui->numberComboMultiple->clear();
+    QSqlQuery q1;
+    q1.exec("SELECT * FROM Sets");
+    while(q1.next()){
+        if(q1.value(0) == selectedFranchise){
+            ui->setComboMultiple->addItem(q1.value(1).toString());
+
         }
     }
 }
@@ -50,6 +70,17 @@ void AddCard::showNumbers(){
     while(q1.next()){
         if(q1.value(1) == selectedSet){
             ui->numberCombo->addItem(q1.value(0).toString());
+        }
+    }
+}
+void AddCard::showNumbersMultiple(){
+    QString selectedSet = ui->setComboMultiple->currentText();
+    ui->numberComboMultiple->clear();
+    QSqlQuery q1;
+    q1.exec("SELECT * FROM Cards");
+    while(q1.next()){
+        if(q1.value(1) == selectedSet){
+            ui->numberComboMultiple->addItem(q1.value(0).toString());
         }
     }
 }
@@ -70,6 +101,23 @@ void AddCard::showImage(){
         }
     }
     ui->cardImage->setStyleSheet("border-image: url(" + userSelectedCard.imgURL + ");");
+}
+void AddCard::showImageMultiple(){
+    QString selectedSet = ui->setComboMultiple->currentText();
+    QString selectedCard = ui->numberComboMultiple->currentText();
+    qDebug() << "Selected Card: " + selectedCard;
+    QSqlQuery q2;
+    q2.exec("SELECT * FROM Cards");
+    while(q2.next()){
+        if(q2.value(0).toString() == selectedCard && selectedSet == q2.value(1).toString()){
+            userSelectedCard.cardName = q2.value(0).toString();
+            userSelectedCard.cardNumber = q2.value(3).toInt();
+            userSelectedCard.setName = q2.value(1).toString();
+            userSelectedCard.rarity = q2.value(4) .toString();
+            userSelectedCard.imgURL = q2.value(5).toString();
+        }
+    }
+    ui->cardImageMultiple->setStyleSheet("border-image: url(" + userSelectedCard.imgURL + ");");
 }
 
 void AddCard::handleReturn(){
@@ -93,8 +141,8 @@ void AddCard::showFranchises(){
         uniqueFranchises.insert(franchise);
     }
 
-        // Clear the combo box before adding new items.
-        ui->franchiseCombo->clear();
+    // Clear the combo box before adding new items.
+    ui->franchiseCombo->clear();
     ui->franchiseComboMultiple->clear();
 
     // Add unique franchise names to the combo box
@@ -114,5 +162,27 @@ void AddCard::addCardSingle(){
     // WE NEED TO CHECK IF THE USER OWNS THE SET ALREADY, AND IF NOT WE NEED TO ADD TO USERS SETS.
 
 }
+void AddCard::addCardMultiple(){
+
+    emit multipleCardsToAdd(CardsToAdd);
+    this->close();
 
 
+
+
+}
+
+void AddCard::addCardToListMultiple() {
+
+    CardsToAdd.push_back(userSelectedCard);
+    ui->displayCardsMultiple->addItem(userSelectedCard.cardName);
+
+}
+void AddCard::showCardFromListMultiple() {
+    QString selectedCardFromList = ui->displayCardsMultiple->currentItem()->text();
+    for(int i = 0; i < CardsToAdd.size(); i++){
+        if(selectedCardFromList == CardsToAdd[i].cardName){
+            ui->cardImageMultiple->setStyleSheet("border-image: url(" + CardsToAdd[i].imgURL + ");");
+        }
+    }
+}

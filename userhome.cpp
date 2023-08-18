@@ -185,6 +185,7 @@ void UserHome::userAddCard()
     addCardWindow = new class AddCard;
     addCardWindow->show();
     connect(addCardWindow, &AddCard::singleCardToAdd, this, &UserHome::addCard);
+    connect(addCardWindow, &AddCard::multipleCardsToAdd, this, &UserHome::addMultipleCards);
 }
 
 void UserHome::showUsersSets(){
@@ -209,52 +210,63 @@ void UserHome::showUsersSets(){
 
 void UserHome::populateTheCards(){
     clearLayout(flowLayout);
-
-    QString selectedSet = ui->setsList->currentItem()->text();
-//    int selectedOption = filterCombo->currentIndex();
-
-    //Searches database for cards from selected set.
-    QSqlQuery q1;
-    q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
-    q1.bindValue(":selectedSet", selectedSet);
-    q1.exec();
-
-
-    while (q1.next()) {
-        bool cardExists = false;
-        for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
-            if(q1.value(0).toString() == LoggedInUser->AllCards[i].cardName){ // add setName to AllCards Vector
-                cardExists = true;
-                break;
-            }
-        }
-
-        //If statement to set opacity depending on card ownership
-        if(!cardExists){
-            QString cardURL = q1.value(5).toString();
-            QString buttonStyleSheet =  "width: 180px;"
-                                        "height: 240px;"
-                                        "border: none;"
-                                        "outline: none;";
-            CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
-            cardButton->setFixedSize(180,240);
-            flowLayout->addWidget(cardButton);
-        }else {
-            QString cardURL = q1.value(5).toString();
-            QString buttonStyleSheet =  "width: 180px;"
-                                       "height: 240px;"
-                                       "border: none;"
-                                       "outline: none;";
-            CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
-            cardButton->setFixedSize(180,240);
-            flowLayout->addWidget(cardButton);
-        }
-
+    QString selectedSet;
+    if(ui->setsList->currentItem() != NULL){
+        selectedSet = ui->setsList->currentItem()->text();
     }
 
-    // Set the layout for the scroll area's contents
-    ui->scrollAreaWidgetContents->setLayout(flowLayout);
-};
+    //
+    QString selectedOption = filterCombo->currentText();
+    qDebug() << selectedOption;
+    //
+
+
+    if(selectedOption == "Filter By Collected"){
+        //Searches database for cards from selected set.
+        QSqlQuery q1;
+        q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
+        q1.bindValue(":selectedSet", selectedSet);
+        q1.exec();
+
+        while (q1.next()) {
+            bool cardExists = false;
+            for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
+                if(q1.value(0).toString() == LoggedInUser->AllCards[i].cardName){ // add setName to AllCards Vector
+                    cardExists = true;
+                    break;
+                }
+            }
+            //If statement to set opacity depending on card ownership
+            if(!cardExists){
+                QString cardURL = q1.value(5).toString();
+                QString buttonStyleSheet =  "width: 180px;"
+                                           "height: 240px;"
+                                           "border: none;"
+                                           "outline: none;";
+                CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
+                cardButton->setFixedSize(180,240);
+                flowLayout->addWidget(cardButton);
+            }else {
+                QString cardURL = q1.value(5).toString();
+                QString buttonStyleSheet =  "width: 180px;"
+                                           "height: 240px;"
+                                           "border: none;"
+                                           "outline: none;";
+                CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
+                cardButton->setFixedSize(180,240);
+                flowLayout->addWidget(cardButton);
+            }
+
+        }
+        // Set the layout for the scroll area's contents
+        ui->scrollAreaWidgetContents->setLayout(flowLayout);
+    }
+
+
+
+
+
+}
 
 void UserHome::clearLayout(QLayout *layout) {
     if (layout == NULL)
@@ -317,6 +329,26 @@ void UserHome::addCard(const Card& userSelectedCard) {
     q3.exec();
     LoggedInUser->AllCards.push_back(userSelectedCard);
     populateTheCards();
+}
+void UserHome::addMultipleCards(const QVector<Card> &CardsToAdd) {
+    qDebug() << "Slot invoked with cards: " << CardsToAdd.size();
+    QSqlQuery q3;
+    for(int i = 0; i<CardsToAdd.size(); i++){
+        qDebug() << "entered loop";
+        q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL, CardRarity)"
+                   "VALUES (:username, :cardname, :setname, :imageurl, :cardrarity)");
+        q3.bindValue(":username", LoggedInUser->name);
+        q3.bindValue(":cardname", CardsToAdd[i].cardName);
+        q3.bindValue(":setname", CardsToAdd[i].setName);
+        q3.bindValue(":imageurl", CardsToAdd[i].imgURL);
+        q3.bindValue(":cardrarity", "common");
+        q3.exec();
+        LoggedInUser->AllCards.push_back(CardsToAdd[i]);
+
+
+    }
+    populateTheCards();
+
 }
 
 void UserHome::handleExit(){

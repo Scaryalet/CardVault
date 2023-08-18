@@ -84,7 +84,7 @@ border: none</string>
       <x>400</x>
       <y>180</y>
       <width>411</width>
-      <height>371</height>
+      <height>491</height>
      </rect>
     </property>
     <property name="font">
@@ -126,7 +126,7 @@ QPushButton {
 }</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -320,7 +320,7 @@ QPushButton::hover {
        <string>Franchise</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="setCombo_2">
+     <widget class="QComboBox" name="setComboMultiple">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -342,12 +342,12 @@ QPushButton::hover {
        <string>Set</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="mNumberCombo">
+     <widget class="QComboBox" name="numberComboMultiple">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>100</y>
-        <width>401</width>
+        <width>321</width>
         <height>31</height>
        </rect>
       </property>
@@ -368,7 +368,7 @@ QPushButton::hover {
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>290</y>
+        <y>390</y>
         <width>191</width>
         <height>31</height>
        </rect>
@@ -388,11 +388,11 @@ QPushButton::hover {
        <string>Return</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="mAddButton">
+     <widget class="QPushButton" name="addCardButtonMultiple">
       <property name="geometry">
        <rect>
         <x>210</x>
-        <y>290</y>
+        <y>390</y>
         <width>191</width>
         <height>31</height>
        </rect>
@@ -412,32 +412,53 @@ QPushButton::hover {
        <string>Add</string>
       </property>
      </widget>
-     <widget class="QScrollArea" name="mDisplayCards">
+     <widget class="QPushButton" name="addIndividuaButton">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>330</x>
+        <y>100</y>
+        <width>71</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Add</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="cardImageMultiple">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
         <y>140</y>
-        <width>401</width>
-        <height>141</height>
+        <width>173</width>
+        <height>230</height>
        </rect>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(255, 252, 226);
-border-color: rgb(184, 179, 132);</string>
+border-color: rgb(184, 179, 132);
+border: 1px solid black;
+border-radius: 5</string>
       </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
       </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>399</width>
-         <height>139</height>
-        </rect>
-       </property>
-      </widget>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+     <widget class="QListWidget" name="displayCardsMultiple">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>140</y>
+        <width>221</width>
+        <height>231</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 252, 226);</string>
+      </property>
      </widget>
     </widget>
    </widget>

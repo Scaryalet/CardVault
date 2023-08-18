@@ -75,6 +75,7 @@ private slots:
     void addCard(const Card& userSelectedCard);
     void createFilterOptions(QComboBox* comboBox);
 
+    void addMultipleCards(const QVector <Card> &CardsToAdd);
 private:
     Ui::UserHome *ui;
     QComboBox *setsCombo;
