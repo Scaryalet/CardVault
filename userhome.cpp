@@ -176,23 +176,25 @@ void UserHome::populateTheCards(){
     QString selectedOption = filterCombo->currentText();
     qDebug() << selectedOption;
     //
+    //Searches database for cards from selected set.
+    QSqlQuery q1;
+    q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
+    q1.bindValue(":selectedSet", selectedSet);
+    q1.exec();
 
-    //default filter
-    if(selectedOption == "" || selectedOption == "All"){
-        //Searches database for cards from selected set.
-        QSqlQuery q1;
-        q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
-        q1.bindValue(":selectedSet", selectedSet);
-        q1.exec();
 
-        while (q1.next()) {
-            bool cardExists = false;
-            for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
-                if(q1.value(0).toString() == LoggedInUser->AllCards[i].cardName){ // add setName to AllCards Vector
-                    cardExists = true;
-                    break;
-                }
+    while (q1.next()) {
+        bool cardExists = false;
+        for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
+            if(q1.value(0).toString() == LoggedInUser->AllCards[i].cardName){ // add setName to AllCards Vector
+                cardExists = true;
+                break;
             }
+        }
+
+
+        //default filter
+        if(selectedOption == "" || selectedOption == "All"){
             //If statement to set opacity depending on card ownership
             if(!cardExists){
                 QString cardURL = q1.value(5).toString();
@@ -214,24 +216,7 @@ void UserHome::populateTheCards(){
                 flowLayout->addWidget(cardButton);
             }
 
-        }
-        // Set the layout for the scroll area's contents
-        ui->scrollAreaWidgetContents->setLayout(flowLayout);
-    }else if (selectedOption == "Collected"){
-        //Searches database for cards from selected set.
-        QSqlQuery q1;
-        q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
-        q1.bindValue(":selectedSet", selectedSet);
-        q1.exec();
-
-        while (q1.next()) {
-            bool cardExists = false;
-            for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
-                if(q1.value(0).toString() == LoggedInUser->AllCards[i].cardName){ // add setName to AllCards Vector
-                    cardExists = true;
-                    break;
-                }
-            }
+        }else if (selectedOption == "Collected"){
             //If statement to set opacity depending on card ownership
             if(cardExists){
                 QString cardURL = q1.value(5).toString();
@@ -244,25 +229,7 @@ void UserHome::populateTheCards(){
                 flowLayout->addWidget(cardButton);
 
             }
-
-        }
-        // Set the layout for the scroll area's contents
-        ui->scrollAreaWidgetContents->setLayout(flowLayout);
-    } else if (selectedOption == "Not Collected"){
-        //Searches database for cards from selected set.
-        QSqlQuery q1;
-        q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
-        q1.bindValue(":selectedSet", selectedSet);
-        q1.exec();
-
-        while (q1.next()) {
-            bool cardExists = false;
-            for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
-                if(q1.value(0).toString() == LoggedInUser->AllCards[i].cardName){ // add setName to AllCards Vector
-                    cardExists = true;
-                    break;
-                }
-            }
+        }else if (selectedOption == "Not Collected"){
             //If statement to set opacity depending on card ownership
             if(!cardExists){
                 QString cardURL = q1.value(5).toString();
@@ -276,23 +243,7 @@ void UserHome::populateTheCards(){
 
             }
 
-        }
-        // Set the layout for the scroll area's contents
-        ui->scrollAreaWidgetContents->setLayout(flowLayout);
-    } else if (selectedOption == "Common"){
-        QSqlQuery q1;
-        q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
-        q1.bindValue(":selectedSet", selectedSet);
-        q1.exec();
-
-        while (q1.next()) {
-            bool cardExists = false;
-            for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
-                if(q1.value(0).toString() == LoggedInUser->AllCards[i].cardName){ // add setName to AllCards Vector
-                    cardExists = true;
-                    break;
-                }
-            }
+        }else if (selectedOption == "Common"){
             if(q1.value(4).toString() == "Common"){
                 //If statement to set opacity depending on card ownership
                 if(!cardExists){
@@ -315,23 +266,8 @@ void UserHome::populateTheCards(){
                     flowLayout->addWidget(cardButton);
                 }
             }
-        }
-        // Set the layout for the scroll area's contents
-        ui->scrollAreaWidgetContents->setLayout(flowLayout);
-    } else if (selectedOption == "Uncommon"){
-        QSqlQuery q1;
-        q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
-        q1.bindValue(":selectedSet", selectedSet);
-        q1.exec();
 
-        while (q1.next()) {
-            bool cardExists = false;
-            for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
-                if(q1.value(0).toString() == LoggedInUser->AllCards[i].cardName){ // add setName to AllCards Vector
-                    cardExists = true;
-                    break;
-                }
-            }
+        }else if (selectedOption == "Uncommon"){
             if(q1.value(4).toString() == "Uncommon"){
                 //If statement to set opacity depending on card ownership
                 if(!cardExists){
@@ -354,23 +290,8 @@ void UserHome::populateTheCards(){
                     flowLayout->addWidget(cardButton);
                 }
             }
-        }
-        // Set the layout for the scroll area's contents
-        ui->scrollAreaWidgetContents->setLayout(flowLayout);
-    }else if (selectedOption == "Rare"){
-        QSqlQuery q1;
-        q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
-        q1.bindValue(":selectedSet", selectedSet);
-        q1.exec();
 
-        while (q1.next()) {
-            bool cardExists = false;
-            for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
-                if(q1.value(0).toString() == LoggedInUser->AllCards[i].cardName){ // add setName to AllCards Vector
-                    cardExists = true;
-                    break;
-                }
-            }
+        }else if (selectedOption == "Rare") {
             if(q1.value(4).toString() == "Rare"){
                 //If statement to set opacity depending on card ownership
                 if(!cardExists){
@@ -393,23 +314,8 @@ void UserHome::populateTheCards(){
                     flowLayout->addWidget(cardButton);
                 }
             }
-        }
-        // Set the layout for the scroll area's contents
-        ui->scrollAreaWidgetContents->setLayout(flowLayout);
-    }else if (selectedOption == "Holo+"){
-        QSqlQuery q1;
-        q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
-        q1.bindValue(":selectedSet", selectedSet);
-        q1.exec();
 
-        while (q1.next()) {
-            bool cardExists = false;
-            for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
-                if(q1.value(0).toString() == LoggedInUser->AllCards[i].cardName){ // add setName to AllCards Vector
-                    cardExists = true;
-                    break;
-                }
-            }
+        }else if (selectedOption == "Holo+") {
             if(q1.value(4).toString() != "Common" && q1.value(4).toString() != "Uncommon" && q1.value(4).toString() != "Rare"){
                 //If statement to set opacity depending on card ownership
                 if(!cardExists){
@@ -432,14 +338,12 @@ void UserHome::populateTheCards(){
                     flowLayout->addWidget(cardButton);
                 }
             }
+
         }
         // Set the layout for the scroll area's contents
         ui->scrollAreaWidgetContents->setLayout(flowLayout);
+
     }
-
-
-
-
 
 }
 
