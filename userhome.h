@@ -80,6 +80,8 @@ private:
     QComboBox *setsCombo;
     QListWidget *setsList;
     QComboBox *filterCombo;
+    bool cardExistsInAllCards(const QString &cardName);
+    bool shouldShowCard(const QSqlQuery &query, const QString &selectedOption);
 };
 
 #endif // USERHOME_H

@@ -165,141 +165,74 @@ void UserHome::showUsersSets(){
 
 }
 
-void UserHome::populateTheCards(){
+void UserHome::populateTheCards() {
     clearLayout(flowLayout);
     QString selectedSet;
-    QString buttonStyleSheet =  "width: 180px;"
+    QString buttonStyleSheet = "width: 180px;"
                                "height: 240px;"
                                "border: none;"
                                "outline: none;";
-    if(ui->setsList->currentItem() != NULL){
+
+    if (ui->setsList->currentItem() != nullptr) {
         selectedSet = ui->setsList->currentItem()->text();
     }
 
-    //
     QString selectedOption = filterCombo->currentText();
     qDebug() << selectedOption;
-    //
-    //Searches database for cards from selected set.
+
     QSqlQuery q1;
     q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
     q1.bindValue(":selectedSet", selectedSet);
     q1.exec();
 
-
     while (q1.next()) {
-        bool cardExists = false;
-        for(int i = 0; i<LoggedInUser->AllCards.size(); i++){
-            if(q1.value(0).toString() == LoggedInUser->AllCards[i].cardName){ // add setName to AllCards Vector
-                cardExists = true;
-                break;
-            }
+        bool cardExists = cardExistsInAllCards(q1.value(0).toString());
+
+        QString cardURL = q1.value(5).toString();
+        double opacity = cardExists ? 1.0 : 0.3;
+        if (selectedOption == "Not Collected") {
+            opacity = 1.0; // Set opacity to 1.0 for all cards under "Not Collected" filter
         }
-        //default filter
-        if(selectedOption == "" || selectedOption == "All"){
-            //If statement to set opacity depending on card ownership
-            if(!cardExists){
-                QString cardURL = q1.value(5).toString();
-                CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
-                cardButton->setFixedSize(180,240);
-                flowLayout->addWidget(cardButton);
-            }else {
-                QString cardURL = q1.value(5).toString();
-                CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
-                cardButton->setFixedSize(180,240);
-                flowLayout->addWidget(cardButton);
-            }
-
-        }else if (selectedOption == "Collected"){
-            //If statement to set opacity depending on card ownership
-            if(cardExists){
-                QString cardURL = q1.value(5).toString();
-                CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
-                cardButton->setFixedSize(180,240);
-                flowLayout->addWidget(cardButton);
-
-            }
-        }else if (selectedOption == "Not Collected"){
-            //If statement to set opacity depending on card ownership
-            if(!cardExists){
-                QString cardURL = q1.value(5).toString();
-                CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
-                cardButton->setFixedSize(180,240);
-                flowLayout->addWidget(cardButton);
-
-            }
-
-        }else if (selectedOption == "Common"){
-            if(q1.value(4).toString() == "Common"){
-                //If statement to set opacity depending on card ownership
-                if(!cardExists){
-                    QString cardURL = q1.value(5).toString();
-                    CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
-                    cardButton->setFixedSize(180,240);
-                    flowLayout->addWidget(cardButton);
-                }else {
-                    QString cardURL = q1.value(5).toString();
-                    CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
-                    cardButton->setFixedSize(180,240);
-                    flowLayout->addWidget(cardButton);
-                }
-            }
-
-        }else if (selectedOption == "Uncommon"){
-            if(q1.value(4).toString() == "Uncommon"){
-                //If statement to set opacity depending on card ownership
-                if(!cardExists){
-                    QString cardURL = q1.value(5).toString();
-                    CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
-                    cardButton->setFixedSize(180,240);
-                    flowLayout->addWidget(cardButton);
-                }else {
-                    QString cardURL = q1.value(5).toString();
-                    CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
-                    cardButton->setFixedSize(180,240);
-                    flowLayout->addWidget(cardButton);
-                }
-            }
-
-        }else if (selectedOption == "Rare") {
-            if(q1.value(4).toString() == "Rare"){
-                //If statement to set opacity depending on card ownership
-                if(!cardExists){
-                    QString cardURL = q1.value(5).toString();
-                    CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
-                    cardButton->setFixedSize(180,240);
-                    flowLayout->addWidget(cardButton);
-                }else {
-                    QString cardURL = q1.value(5).toString();
-                    CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
-                    cardButton->setFixedSize(180,240);
-                    flowLayout->addWidget(cardButton);
-                }
-            }
-
-        }else if (selectedOption == "Holo+") {
-            if(q1.value(4).toString() != "Common" && q1.value(4).toString() != "Uncommon" && q1.value(4).toString() != "Rare"){
-                //If statement to set opacity depending on card ownership
-                if(!cardExists){
-                    QString cardURL = q1.value(5).toString();
-                    CustomButton* cardButton = new CustomButton("", cardURL,0.3,buttonStyleSheet, this);    //Using custom button to change opacity
-                    cardButton->setFixedSize(180,240);
-                    flowLayout->addWidget(cardButton);
-                }else {
-                    QString cardURL = q1.value(5).toString();
-                    CustomButton* cardButton = new CustomButton("", cardURL, 1.0,buttonStyleSheet, this);   //Using custom button to change opacity
-                    cardButton->setFixedSize(180,240);
-                    flowLayout->addWidget(cardButton);
-                }
-            }
-
+        if (shouldShowCard(q1, selectedOption)) {
+            CustomButton* cardButton = new CustomButton("", cardURL, opacity, buttonStyleSheet, this);
+            cardButton->setFixedSize(180, 240);
+            flowLayout->addWidget(cardButton);
         }
-        // Set the layout for the scroll area's contents
-        ui->scrollAreaWidgetContents->setLayout(flowLayout);
-
     }
 
+    ui->scrollAreaWidgetContents->setLayout(flowLayout);
 }
+
+bool UserHome::cardExistsInAllCards(const QString& cardName) {
+    for (const auto& card : LoggedInUser->AllCards) {
+        if (card.cardName == cardName) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool UserHome::shouldShowCard(const QSqlQuery& query, const QString& selectedOption) {
+    QString rarity = query.value(4).toString();
+
+    if (selectedOption == "" || selectedOption == "All") {
+        return true;
+    } else if (selectedOption == "Collected") {
+        return cardExistsInAllCards(query.value(0).toString());
+    } else if (selectedOption == "Not Collected") {
+        return !cardExistsInAllCards(query.value(0).toString());
+    } else if (selectedOption == "Common") {
+        return rarity == "Common";
+    } else if (selectedOption == "Uncommon") {
+        return rarity == "Uncommon";
+    } else if (selectedOption == "Rare") {
+        return rarity == "Rare";
+    } else if (selectedOption == "Holo+") {
+        return rarity != "Common" && rarity != "Uncommon" && rarity != "Rare";
+    }
+    return false;
+}
+
 
 void UserHome::clearLayout(QLayout *layout) {
     if (layout == NULL)
