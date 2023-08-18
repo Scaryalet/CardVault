@@ -22,12 +22,16 @@ set(PROJECT_SOURCES
         flowlayout.h flowlayout.cpp
         addset.h addset.cpp addset.ui
         addcard.h addcard.cpp addcard.ui
+        adminhome.h adminhome.cpp adminhome.ui
+        adminusers.h adminusers.cpp adminusers.ui
+        admincards.h admincards.cpp admincards.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(CardVault
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET CardVault APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

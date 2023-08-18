@@ -1,6 +1,8 @@
- #include "loginregister.h"
+#include "loginregister.h"
 #include "./ui_loginregister.h"
 #include "userhome.h"
+#include "adminhome.h"
+#include "./ui_adminhome.h"
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QMessageBox>
@@ -96,6 +98,8 @@ void LoginRegister::on_loginButton_clicked()
         setCentralWidget(userHome);
     } else if(usernameCorrect == true && passwordCorrect == true && isAdmin == true){ // if admin user is found
         QMessageBox::information(this, "Admin","Admin Signed In");
+        adminhome* adminHome = new adminhome;
+        this->setCentralWidget(adminHome);
     } else if(usernameCorrect == true && passwordCorrect == false){ // if username is correct but password is wrong
         QMessageBox::information(this, "incorrect password","incorrect password");
     } else if(usernameCorrect == false && passwordCorrect == false) { // if no matching user is found
