@@ -18,6 +18,7 @@ public:
     ~AddCard();
     QString imageURL;
     Card userSelectedCard;
+    QVector <Card> CardsToAdd;
 
 public slots:
     void showSets();
@@ -27,10 +28,18 @@ private slots:
     void handleReturn();
     void showFranchises();
     void addCardSingle();
+    void addCardMultiple();
+    void showSetsMultiple();
+    void showNumbersMultiple();
+    void showImageMultiple();
+    void addCardToListMultiple();
+    void showCardFromListMultiple();
 private:
     Ui::AddCard *ui;
+
 signals:
     void singleCardToAdd(Card);
+    void multipleCardsToAdd(QVector<Card>);
 };
 
 #endif // ADDCARD_H

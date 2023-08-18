@@ -73,13 +73,15 @@ private slots:
     void userAddSet();
     void handleExit();
     void addCard(const Card& userSelectedCard);
-    void createFilterOptions(QComboBox* comboBox);
 
+    void addMultipleCards(const QVector <Card> &CardsToAdd);
 private:
     Ui::UserHome *ui;
     QComboBox *setsCombo;
     QListWidget *setsList;
     QComboBox *filterCombo;
+    bool cardExistsInAllCards(const QString &cardName);
+    bool shouldShowCard(const QSqlQuery &query, const QString &selectedOption);
 };
 
 #endif // USERHOME_H
