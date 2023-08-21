@@ -15,6 +15,9 @@ UserHome::UserHome(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::UserHome)
 {
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("database.db");
+    db.open();
 
     ui->setupUi(this);
 
@@ -41,7 +44,6 @@ UserHome::UserHome(QWidget *parent) :
     populateSet2022McDonalds();
     showFranchiseNames();
 //    createFilterOptions(filterCombo);
-
 }
 
 UserHome::~UserHome()
@@ -49,11 +51,9 @@ UserHome::~UserHome()
     delete ui;
 }
 
-
-
 void UserHome::populateSet2022McDonalds()
 {
-
+    db.open();
     QString setName = "2022 McDonalds";
     QString franchiseName = "Pokemon";
     int setID = 1;
@@ -101,14 +101,9 @@ void UserHome::populateSet2022McDonalds()
 
             q2.exec();
 
-
         }
 
     }
-
-
-
-
 
 }
 
@@ -116,22 +111,24 @@ void UserHome::showFranchiseNames()
 {
     // A set to store unique franchise names, we use QSet because QSet will not store duplicate entries
     QSet<QString> uniqueFranchises;
-
+    QVector <QString> vectorFranchises;
     // Loop through the LoggedInUser->AllSets vector to find unique franchise names
     for (const Set& set : LoggedInUser->AllSets) {
         uniqueFranchises.insert(set.franchiseName);
     }
-
     // Add unique franchise names to the combo box
     for (const QString& franchiseName : uniqueFranchises) {
-        setsCombo->addItem(franchiseName);
+        ui->setsCombo->addItem(franchiseName);
     }
+
+
 }
+
 
 void UserHome::userAddSet()
 {
     addSetWindow = new class AddSet;
-    addSetWindow->show();
+    setCentralWidget(addSetWindow);
     // runs when signal is caught from AddSet
     connect(addSetWindow, &AddSet::setAdded, this, &UserHome::addSet);
 
@@ -147,19 +144,14 @@ void UserHome::userAddCard()
 
 void UserHome::showUsersSets(){
 
-    // disconnect slot to avoid crashes
-//    disconnect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::populateTheCards);
-
     QString selectedFranchise = setsCombo->currentText();
 
     // Clear the list widget before adding new items.
     setsList->clear();
 
-
     for (const Set& set : LoggedInUser->AllSets) {
         if (set.franchiseName == selectedFranchise) {
             setsList->addItem(set.setName);
-            qDebug() << set.setName;
         }
     }
 
@@ -178,8 +170,6 @@ void UserHome::populateTheCards() {
     }
 
     QString selectedOption = filterCombo->currentText();
-    qDebug() << selectedOption;
-
     QSqlQuery q1;
     q1.prepare("SELECT * FROM Cards WHERE SetName = :selectedSet");
     q1.bindValue(":selectedSet", selectedSet);
@@ -199,8 +189,8 @@ void UserHome::populateTheCards() {
             flowLayout->addWidget(cardButton);
         }
     }
-
     ui->scrollAreaWidgetContents->setLayout(flowLayout);
+
 }
 
 bool UserHome::cardExistsInAllCards(const QString& cardName) {
@@ -233,7 +223,6 @@ bool UserHome::shouldShowCard(const QSqlQuery& query, const QString& selectedOpt
     return false;
 }
 
-
 void UserHome::clearLayout(QLayout *layout) {
     if (layout == NULL)
         return;
@@ -251,7 +240,7 @@ void UserHome::clearLayout(QLayout *layout) {
 }
 
 void UserHome::addSet(const QString& setName){ //
-    qDebug() << "addset";
+    db.open();
     QSqlQuery q1;
 
     // select all from sets table
@@ -279,11 +268,12 @@ void UserHome::addSet(const QString& setName){ //
             q1.exec();
         }
     }
-    showFranchiseNames();
+
+
 }
 
 void UserHome::addCard(const Card& userSelectedCard) {
-    //
+    db.open();
     QSqlQuery q3;
     q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL, CardRarity)"
                "VALUES (:username, :cardname, :setname, :imageurl, :cardrarity)");
@@ -294,13 +284,15 @@ void UserHome::addCard(const Card& userSelectedCard) {
     q3.bindValue(":cardrarity", "common");
     q3.exec();
     LoggedInUser->AllCards.push_back(userSelectedCard);
+
+
     populateTheCards();
 }
+
 void UserHome::addMultipleCards(const QVector<Card> &CardsToAdd) {
-    qDebug() << "Slot invoked with cards: " << CardsToAdd.size();
+    db.open();
     QSqlQuery q3;
     for(int i = 0; i<CardsToAdd.size(); i++){
-        qDebug() << "entered loop";
         q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL, CardRarity)"
                    "VALUES (:username, :cardname, :setname, :imageurl, :cardrarity)");
         q3.bindValue(":username", LoggedInUser->name);
@@ -318,10 +310,12 @@ void UserHome::addMultipleCards(const QVector<Card> &CardsToAdd) {
 }
 
 void UserHome::handleExit(){
+
+    db.close();
+    db = QSqlDatabase();
+    QSqlDatabase::removeDatabase("database.db");
+
     LoginRegister *newLoginScreen = new class LoginRegister;
     setCentralWidget(newLoginScreen);
-    delete LoggedInUser;
-    db.close();
-
-
+    LoggedInUser = new CurrentUser;
 }

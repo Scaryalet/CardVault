@@ -10,8 +10,7 @@ AddSet::AddSet(QWidget *parent) :
     ui(new Ui::AddSet)
 {
     ui->setupUi(this);
-//    setWindowTitle("Add New Set");
-    setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+    setWindowTitle("Add New Set");
 
 
     QSqlQuery q1;
@@ -40,20 +39,23 @@ AddSet::AddSet(QWidget *parent) :
 AddSet::~AddSet()
 {
     delete ui;
-
-
 }
 
 void AddSet::addSet(){
     QString setName = ui->listWidget->currentItem()->text(); // temp string to hold selected set name
     // emit a signal with setName that will be caught on UserHome
     emit setAdded(setName);
-    this->close();
+
+    UserHome *userHomeWindow = new class UserHome;
+
+    setCentralWidget(userHomeWindow);
+
 
 }
 
 void AddSet::on_returnButton_clicked()
 {
-    this->close();
+    UserHome *userHomeWindow = new class UserHome;
+    setCentralWidget(userHomeWindow);
 }
 

@@ -20,9 +20,6 @@ public:
     int tempId, tempNum;
     QString tempName;
 
-
-
-
 public slots:
     void addSet();
 private:

@@ -59,8 +59,8 @@ public:
     AddSet* addSetWindow;
     AddCard* addCardWindow;
     Set s1;
+    QSqlDatabase db;
 public slots:
-
 
 private slots:
     void showFranchiseNames();
