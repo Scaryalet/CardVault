@@ -56,8 +56,6 @@ public:
     explicit UserHome(QWidget *parent = nullptr);
     ~UserHome();
     FlowLayout *flowLayout;
-    AddSet* addSetWindow;
-    AddCard* addCardWindow;
     Set s1;
     QSqlDatabase db;
 public slots:
@@ -66,15 +64,12 @@ private slots:
     void showFranchiseNames();
     void showUsersSets();
     void clearLayout(QLayout *layout);
-    void addSet(const QString& setName);
     void populateTheCards();
     void populateSet2022McDonalds();
     void userAddCard();
     void userAddSet();
     void handleExit();
-    void addCard(const Card& userSelectedCard);
 
-    void addMultipleCards(const QVector <Card> &CardsToAdd);
 private:
     Ui::UserHome *ui;
     QComboBox *setsCombo;

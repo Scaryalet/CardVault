@@ -14,7 +14,9 @@
 UserHome::UserHome(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::UserHome)
+
 {
+    setWindowTitle("Home");
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("database.db");
     db.open();
@@ -127,19 +129,17 @@ void UserHome::showFranchiseNames()
 
 void UserHome::userAddSet()
 {
-    addSetWindow = new class AddSet;
+    AddSet *addSetWindow = new class AddSet;
     setCentralWidget(addSetWindow);
-    // runs when signal is caught from AddSet
-    connect(addSetWindow, &AddSet::setAdded, this, &UserHome::addSet);
+
 
 }
 
 void UserHome::userAddCard()
 {
-    addCardWindow = new class AddCard;
-    addCardWindow->show();
-    connect(addCardWindow, &AddCard::singleCardToAdd, this, &UserHome::addCard);
-    connect(addCardWindow, &AddCard::multipleCardsToAdd, this, &UserHome::addMultipleCards);
+    AddCard *addCardWindow = new class AddCard;
+    setCentralWidget(addCardWindow);
+
 }
 
 void UserHome::showUsersSets(){
@@ -180,9 +180,7 @@ void UserHome::populateTheCards() {
 
         QString cardURL = q1.value(5).toString();
         double opacity = cardExists ? 1.0 : 0.3;
-        if (selectedOption == "Not Collected") {
-            opacity = 1.0; // Set opacity to 1.0 for all cards under "Not Collected" filter
-        }
+
         if (shouldShowCard(q1, selectedOption)) {
             CustomButton* cardButton = new CustomButton("", cardURL, opacity, buttonStyleSheet, this);
             cardButton->setFixedSize(180, 240);
@@ -239,75 +237,10 @@ void UserHome::clearLayout(QLayout *layout) {
     }
 }
 
-void UserHome::addSet(const QString& setName){ //
-    db.open();
-    QSqlQuery q1;
-
-    // select all from sets table
-    q1.exec("SELECT * FROM SETS");
-    while(q1.next()){
-        // if set name matches chosen set from list
-        if(setName == q1.value(1).toString()){
-            // set 'Set' object (declared in header file) to set info from DB
-            s1.franchiseName=q1.value(0).toString();
-            s1.setName = q1.value(1).toString();
-            s1.setId = q1.value(2).toInt();
-            s1.numberOfCards = q1.value(3).toInt();
-
-            // push back to users allsets vector
-            LoggedInUser->AllSets.push_back(s1);
-
-            // insert into UserSets DB
-            q1.prepare("INSERT INTO UserSets (Username,  SetName, SetID, Franchise)"
-                       "VALUES (:username, :setName, :setID, :franchise)");
-            q1.bindValue(":username", LoggedInUser->name);
-            q1.bindValue(":franchise", s1.franchiseName);
-            q1.bindValue(":setName", s1.setName);
-            q1.bindValue(":setID", s1.setId);
-
-            q1.exec();
-        }
-    }
 
 
-}
-
-void UserHome::addCard(const Card& userSelectedCard) {
-    db.open();
-    QSqlQuery q3;
-    q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL, CardRarity)"
-               "VALUES (:username, :cardname, :setname, :imageurl, :cardrarity)");
-    q3.bindValue(":username", LoggedInUser->name);
-    q3.bindValue(":cardname", userSelectedCard.cardName);
-    q3.bindValue(":setname", userSelectedCard.setName);
-    q3.bindValue(":imageurl", userSelectedCard.imgURL);
-    q3.bindValue(":cardrarity", "common");
-    q3.exec();
-    LoggedInUser->AllCards.push_back(userSelectedCard);
 
 
-    populateTheCards();
-}
-
-void UserHome::addMultipleCards(const QVector<Card> &CardsToAdd) {
-    db.open();
-    QSqlQuery q3;
-    for(int i = 0; i<CardsToAdd.size(); i++){
-        q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL, CardRarity)"
-                   "VALUES (:username, :cardname, :setname, :imageurl, :cardrarity)");
-        q3.bindValue(":username", LoggedInUser->name);
-        q3.bindValue(":cardname", CardsToAdd[i].cardName);
-        q3.bindValue(":setname", CardsToAdd[i].setName);
-        q3.bindValue(":imageurl", CardsToAdd[i].imgURL);
-        q3.bindValue(":cardrarity", "common");
-        q3.exec();
-        LoggedInUser->AllCards.push_back(CardsToAdd[i]);
-
-
-    }
-    populateTheCards();
-
-}
 
 void UserHome::handleExit(){
 

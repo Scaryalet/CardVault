@@ -1,5 +1,6 @@
 #include "addcard.h"
 #include "ui_addcard.h"
+#include "userhome.h"
 #include <QVector>
 #include <QComboBox>
 #include <QSqlQuery>
@@ -10,12 +11,14 @@ AddCard::AddCard(QWidget *parent) :
     ui(new Ui::AddCard)
 {
     ui->setupUi(this);
-
+    db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("database.db");
+    db.open();
 
     showFranchises();
 
     //signals
-    connect(ui->franchiseCombo, &QComboBox::currentTextChanged, this, &AddCard::showSets);
+    connect(ui->franchiseCombo, &QComboBox::currentTextChanged, this, &AddCard::showSetsSingle);
     connect(ui->franchiseComboMultiple, &QComboBox::currentTextChanged, this, &AddCard::showSetsMultiple);
     connect(ui->setCombo, &QComboBox::currentTextChanged, this, &AddCard::showNumbers);
     connect(ui->setComboMultiple, &QComboBox::currentTextChanged, this, &AddCard::showNumbersMultiple);
@@ -28,36 +31,31 @@ AddCard::AddCard(QWidget *parent) :
     connect(ui->displayCardsMultiple, &QListWidget::currentItemChanged, this, &AddCard::showCardFromListMultiple);
     connect(ui->addCardButtonMultiple, &QPushButton::clicked, this, &AddCard::addCardMultiple);
 
-
 }
 
 AddCard::~AddCard()
 {
     delete ui;
 }
-void AddCard::showSets(){
-    QString selectedFranchise = ui->franchiseCombo->currentText();
-    ui->setCombo->clear();
-    ui->numberCombo->clear();
-    QSqlQuery q1;
-    q1.exec("SELECT * FROM Sets");
-    while(q1.next()){
-        if(q1.value(0) == selectedFranchise){
-            ui->setCombo->addItem(q1.value(1).toString());
 
-        }
-    }
+void AddCard::showSetsSingle(){
+    showSets(ui->setCombo, ui->numberCombo);
+
 }
-void AddCard::showSetsMultiple(){
-    QString selectedFranchise = ui->franchiseComboMultiple->currentText();
-    ui->setComboMultiple->clear();
-    ui->numberComboMultiple->clear();
-    QSqlQuery q1;
-    q1.exec("SELECT * FROM Sets");
-    while(q1.next()){
-        if(q1.value(0) == selectedFranchise){
-            ui->setComboMultiple->addItem(q1.value(1).toString());
 
+void AddCard::showSetsMultiple(){
+    showSets(ui->setComboMultiple, ui->numberComboMultiple);   // FIGURE OUT HOW TO RUN THIS FUNCTION DIRECTLY FROM CONNECT STATEMENT
+}
+
+
+void AddCard::showSets(QComboBox *combo1, QComboBox *combo2){
+    QString selectedFranchise = ui->franchiseCombo->currentText();
+    combo1->clear();
+    combo2->clear();
+
+    for(int i = 0; i < LoggedInUser->AllSets.size(); i++){
+        if(LoggedInUser->AllSets[i].franchiseName == selectedFranchise){
+            combo1->addItem(LoggedInUser->AllSets[i].setName);
         }
     }
 }
@@ -73,6 +71,7 @@ void AddCard::showNumbers(){
         }
     }
 }
+
 void AddCard::showNumbersMultiple(){
     QString selectedSet = ui->setComboMultiple->currentText();
     ui->numberComboMultiple->clear();
@@ -102,6 +101,7 @@ void AddCard::showImage(){
     }
     ui->cardImage->setStyleSheet("border-image: url(" + userSelectedCard.imgURL + ");");
 }
+
 void AddCard::showImageMultiple(){
     QString selectedSet = ui->setComboMultiple->currentText();
     QString selectedCard = ui->numberComboMultiple->currentText();
@@ -121,7 +121,8 @@ void AddCard::showImageMultiple(){
 }
 
 void AddCard::handleReturn(){
-    close();
+    UserHome *userHome = new class UserHome;
+    setCentralWidget(userHome);
 }
 
 void AddCard::showFranchises(){
@@ -153,23 +154,42 @@ void AddCard::showFranchises(){
 }
 
 void AddCard::addCardSingle(){
+    QSqlQuery q3;
+    q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL, CardRarity)"
+               "VALUES (:username, :cardname, :setname, :imageurl, :cardrarity)");
+    q3.bindValue(":username", LoggedInUser->name);
+    q3.bindValue(":cardname", userSelectedCard.cardName);
+    q3.bindValue(":setname", userSelectedCard.setName);
+    q3.bindValue(":imageurl", userSelectedCard.imgURL);
+    q3.bindValue(":cardrarity", "common");
+    q3.exec();
+    LoggedInUser->AllCards.push_back(userSelectedCard);
 
     QMessageBox::information(this, "Card Added!", userSelectedCard.cardName + " added to your portfolio!");
-    emit singleCardToAdd(userSelectedCard);
 
-    this->close();
 
-    // WE NEED TO CHECK IF THE USER OWNS THE SET ALREADY, AND IF NOT WE NEED TO ADD TO USERS SETS.
-
+    UserHome *userHome = new class UserHome;
+    setCentralWidget(userHome);
 }
+
 void AddCard::addCardMultiple(){
 
-    emit multipleCardsToAdd(CardsToAdd);
-    this->close();
+    QSqlQuery q3;
+    for(int i = 0; i<CardsToAdd.size(); i++){
+        q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL, CardRarity)"
+                   "VALUES (:username, :cardname, :setname, :imageurl, :cardrarity)");
+        q3.bindValue(":username", LoggedInUser->name);
+        q3.bindValue(":cardname", CardsToAdd[i].cardName);
+        q3.bindValue(":setname", CardsToAdd[i].setName);
+        q3.bindValue(":imageurl", CardsToAdd[i].imgURL);
+        q3.bindValue(":cardrarity", "common");
+        q3.exec();
+        LoggedInUser->AllCards.push_back(CardsToAdd[i]);
 
 
-
-
+    }
+    UserHome *userHome = new class UserHome;
+    setCentralWidget(userHome);
 }
 
 void AddCard::addCardToListMultiple() {
@@ -178,6 +198,7 @@ void AddCard::addCardToListMultiple() {
     ui->displayCardsMultiple->addItem(userSelectedCard.cardName);
 
 }
+
 void AddCard::showCardFromListMultiple() {
     QString selectedCardFromList = ui->displayCardsMultiple->currentItem()->text();
     for(int i = 0; i < CardsToAdd.size(); i++){

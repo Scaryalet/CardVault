@@ -1,9 +1,9 @@
 #ifndef ADDSET_H
 #define ADDSET_H
 
+#include "qcombobox.h"
 #include <QMainWindow>
 #include <QSqlDatabase>
-#include "loginregister.h"
 
 namespace Ui {
 class AddSet;
@@ -24,12 +24,13 @@ public slots:
     void addSet();
 private:
     Ui::AddSet *ui;
+    QComboBox *franchiseCombo;
 
-signals:
-    void setAdded(QString);
 
 private slots:
     void on_returnButton_clicked();
+    void franchiseBox();
+    void showSetList();
 };
 
 #endif // ADDSET_H

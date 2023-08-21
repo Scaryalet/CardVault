@@ -9,6 +9,7 @@ LoginRegister::LoginRegister(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::LoginRegister)
 {
+    setWindowTitle("Card Vault");
     ui->setupUi(this);
     LoggedInUser = new CurrentUser;
     db = QSqlDatabase::addDatabase("QSQLITE");
