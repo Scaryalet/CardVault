@@ -22,6 +22,7 @@ set(PROJECT_SOURCES
         flowlayout.h flowlayout.cpp
         addset.h addset.cpp addset.ui
         addcard.h addcard.cpp addcard.ui
+        forgotpassword.h forgotpassword.cpp forgotpassword.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -58,6 +59,15 @@ set_target_properties(CardVault PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
+
+
+add_custom_command(
+        TARGET CardVault POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_SOURCE_DIR}/database.db
+                ${CMAKE_CURRENT_BINARY_DIR}
+)
+
 
 install(TARGETS CardVault
     BUNDLE DESTINATION .

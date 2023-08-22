@@ -34,18 +34,16 @@ UserHome::UserHome(QWidget *parent) :
 
     //Connect signals with slots
     connect(ui->setsCombo, &QComboBox::currentTextChanged, this, &UserHome::showUsersSets);
-    connect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::populateTheCards);
+    connect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::displayTheCards);
+    connect(ui->setsList, &QListWidget::currentItemChanged, this, &UserHome::resetFilter);
     connect(ui->userNewSet, &QPushButton::clicked, this, &UserHome::userAddSet);
     connect(ui->userNewCard, &QPushButton::clicked, this, &UserHome::userAddCard);
     connect(ui->exitButton, &QPushButton::clicked, this, &UserHome::handleExit);
-    //
-    connect(ui->filterCombo, &QComboBox::currentTextChanged, this, &UserHome::populateTheCards);
-    //
+    connect(ui->filterCombo, &QComboBox::currentTextChanged, this, &UserHome::displayTheCards);
 
     //Functions that run when page loads
     populateSet2022McDonalds();
     showFranchiseNames();
-//    createFilterOptions(filterCombo);
 }
 
 UserHome::~UserHome()
@@ -53,6 +51,7 @@ UserHome::~UserHome()
     delete ui;
 }
 
+//This function can be removed when code is added for database file to copy when app is built
 void UserHome::populateSet2022McDonalds()
 {
     db.open();
@@ -109,6 +108,23 @@ void UserHome::populateSet2022McDonalds()
 
 }
 
+//Functions for going to addSet and addCard page
+void UserHome::userAddSet()
+{
+    AddSet *addSetWindow = new class AddSet;
+    setCentralWidget(addSetWindow);
+
+
+}
+
+void UserHome::userAddCard()
+{
+    AddCard *addCardWindow = new class AddCard;
+    setCentralWidget(addCardWindow);
+
+}
+
+// Function to show unique Franchise names in QComboBox
 void UserHome::showFranchiseNames()
 {
     // A set to store unique franchise names, we use QSet because QSet will not store duplicate entries
@@ -126,22 +142,7 @@ void UserHome::showFranchiseNames()
 
 }
 
-
-void UserHome::userAddSet()
-{
-    AddSet *addSetWindow = new class AddSet;
-    setCentralWidget(addSetWindow);
-
-
-}
-
-void UserHome::userAddCard()
-{
-    AddCard *addCardWindow = new class AddCard;
-    setCentralWidget(addCardWindow);
-
-}
-
+// Function to add sets to the QListWidget
 void UserHome::showUsersSets(){
 
     QString selectedFranchise = setsCombo->currentText();
@@ -157,8 +158,11 @@ void UserHome::showUsersSets(){
 
 }
 
-void UserHome::populateTheCards() {
+
+// Functions to display cards
+void UserHome::displayTheCards() {
     clearLayout(flowLayout);
+
     QString selectedSet;
     QString buttonStyleSheet = "width: 180px;"
                                "height: 240px;"
@@ -188,9 +192,12 @@ void UserHome::populateTheCards() {
         }
     }
     ui->scrollAreaWidgetContents->setLayout(flowLayout);
-
 }
-
+//Function to reset filter options
+void UserHome::resetFilter() {
+    ui->filterCombo->setCurrentIndex(-1);
+}
+//Function to check if card is in Users Card
 bool UserHome::cardExistsInAllCards(const QString& cardName) {
     for (const auto& card : LoggedInUser->AllCards) {
         if (card.cardName == cardName) {
@@ -199,7 +206,7 @@ bool UserHome::cardExistsInAllCards(const QString& cardName) {
     }
     return false;
 }
-
+//Function for the filter options
 bool UserHome::shouldShowCard(const QSqlQuery& query, const QString& selectedOption) {
     QString rarity = query.value(4).toString();
 
@@ -221,6 +228,8 @@ bool UserHome::shouldShowCard(const QSqlQuery& query, const QString& selectedOpt
     return false;
 }
 
+
+//Function to clear the QLayout.
 void UserHome::clearLayout(QLayout *layout) {
     if (layout == NULL)
         return;
@@ -237,11 +246,7 @@ void UserHome::clearLayout(QLayout *layout) {
     }
 }
 
-
-
-
-
-
+// Function to exit and go back to login page
 void UserHome::handleExit(){
 
     db.close();

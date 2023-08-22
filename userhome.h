@@ -64,12 +64,13 @@ private slots:
     void showFranchiseNames();
     void showUsersSets();
     void clearLayout(QLayout *layout);
-    void populateTheCards();
+    void displayTheCards();
     void populateSet2022McDonalds();
     void userAddCard();
     void userAddSet();
     void handleExit();
 
+    void resetFilter();
 private:
     Ui::UserHome *ui;
     QComboBox *setsCombo;

@@ -17,18 +17,23 @@ AddCard::AddCard(QWidget *parent) :
 
     showFranchises();
 
-    //signals
+    //Signals to show set names
     connect(ui->franchiseCombo, &QComboBox::currentTextChanged, this, &AddCard::showSetsSingle);
     connect(ui->franchiseComboMultiple, &QComboBox::currentTextChanged, this, &AddCard::showSetsMultiple);
+    //Signals to show numbers
     connect(ui->setCombo, &QComboBox::currentTextChanged, this, &AddCard::showNumbers);
     connect(ui->setComboMultiple, &QComboBox::currentTextChanged, this, &AddCard::showNumbersMultiple);
+    //Signals to show Images
     connect(ui->numberCombo, &QComboBox::currentTextChanged, this, &AddCard::showImage);
     connect(ui->numberComboMultiple, &QComboBox::currentTextChanged, this, &AddCard::showImageMultiple);
+    //Return to UserHome signals
     connect(ui->returnButtonMultiple, &QPushButton::clicked, this, &AddCard::handleReturn);
     connect(ui->returnButtonSingle, &QPushButton::clicked, this, &AddCard::handleReturn);
-    connect(ui->addCardButton, &QPushButton::clicked, this, &AddCard::addCardSingle);
+    //Multiple card additional signals
     connect(ui->addIndividuaButton, &QPushButton::clicked, this, &AddCard::addCardToListMultiple);
     connect(ui->displayCardsMultiple, &QListWidget::currentItemChanged, this, &AddCard::showCardFromListMultiple);
+    //Add card signals
+    connect(ui->addCardButton, &QPushButton::clicked, this, &AddCard::addCardSingle);
     connect(ui->addCardButtonMultiple, &QPushButton::clicked, this, &AddCard::addCardMultiple);
 
 }
@@ -38,18 +43,47 @@ AddCard::~AddCard()
     delete ui;
 }
 
-void AddCard::showSetsSingle(){
-    showSets(ui->setCombo, ui->numberCombo);
+//Function to show the franchise names
+void AddCard::showFranchises(){
 
+    QVector <QString> AllSets;
+    QSqlQuery q1;
+    q1.exec("SELECT * FROM Sets");
+    while(q1.next()){
+        AllSets.push_back(q1.value(0).toString());
+
+    }
+    // A set to store unique franchise names, we use QSet because QSet will not store duplicate entries
+    QSet<QString> uniqueFranchises;
+
+    // Loop through the LoggedInUser->AllSets vector to find unique franchise names
+    for (const QString& franchise : AllSets) {
+        uniqueFranchises.insert(franchise);
+    }
+
+    // Clear the combo box before adding new items.
+    ui->franchiseCombo->clear();
+    ui->franchiseComboMultiple->clear();
+
+    // Add unique franchise names to the combo box
+    for (const QString& franchiseName : uniqueFranchises) {
+        ui->franchiseCombo->addItem(franchiseName);
+        ui->franchiseComboMultiple->addItem(franchiseName);
+    }
+}
+
+//Functions to call showSets
+void AddCard::showSetsSingle(){
+    showSets(ui->setCombo, ui->numberCombo, ui->franchiseCombo);
 }
 
 void AddCard::showSetsMultiple(){
-    showSets(ui->setComboMultiple, ui->numberComboMultiple);   // FIGURE OUT HOW TO RUN THIS FUNCTION DIRECTLY FROM CONNECT STATEMENT
+    showSets(ui->setComboMultiple, ui->numberComboMultiple,ui->franchiseComboMultiple);
 }
 
-
-void AddCard::showSets(QComboBox *combo1, QComboBox *combo2){
-    QString selectedFranchise = ui->franchiseCombo->currentText();
+//Function to reduce code
+void AddCard::showSets(QComboBox *combo1, QComboBox *combo2, QComboBox *combo3){
+    QString selectedFranchise = combo3->currentText();
     combo1->clear();
     combo2->clear();
 
@@ -60,6 +94,7 @@ void AddCard::showSets(QComboBox *combo1, QComboBox *combo2){
     }
 }
 
+//Functions to show the number in combo boxes
 void AddCard::showNumbers(){
     QString selectedSet = ui->setCombo->currentText();
     ui->numberCombo->clear();
@@ -84,6 +119,7 @@ void AddCard::showNumbersMultiple(){
     }
 }
 
+//Function to show images
 void AddCard::showImage(){
     QString selectedSet = ui->setCombo->currentText();
     QString selectedCard = ui->numberCombo->currentText();
@@ -120,39 +156,13 @@ void AddCard::showImageMultiple(){
     ui->cardImageMultiple->setStyleSheet("border-image: url(" + userSelectedCard.imgURL + ");");
 }
 
+//Function to return to userHome
 void AddCard::handleReturn(){
     UserHome *userHome = new class UserHome;
     setCentralWidget(userHome);
 }
 
-void AddCard::showFranchises(){
-
-    QVector <QString> AllSets;
-    QSqlQuery q1;
-    q1.exec("SELECT * FROM Sets");
-    while(q1.next()){
-        AllSets.push_back(q1.value(0).toString());
-
-    }
-    // A set to store unique franchise names, we use QSet because QSet will not store duplicate entries
-    QSet<QString> uniqueFranchises;
-
-    // Loop through the LoggedInUser->AllSets vector to find unique franchise names
-    for (const QString& franchise : AllSets) {
-        uniqueFranchises.insert(franchise);
-    }
-
-    // Clear the combo box before adding new items.
-    ui->franchiseCombo->clear();
-    ui->franchiseComboMultiple->clear();
-
-    // Add unique franchise names to the combo box
-    for (const QString& franchiseName : uniqueFranchises) {
-        ui->franchiseCombo->addItem(franchiseName);
-        ui->franchiseComboMultiple->addItem(franchiseName);
-    }
-}
-
+//Functions to add cards
 void AddCard::addCardSingle(){
     QSqlQuery q3;
     q3.prepare("INSERT INTO UserCards (Username, CardName, SetName, ImageURL, CardRarity)"
@@ -166,7 +176,6 @@ void AddCard::addCardSingle(){
     LoggedInUser->AllCards.push_back(userSelectedCard);
 
     QMessageBox::information(this, "Card Added!", userSelectedCard.cardName + " added to your portfolio!");
-
 
     UserHome *userHome = new class UserHome;
     setCentralWidget(userHome);
@@ -185,13 +194,12 @@ void AddCard::addCardMultiple(){
         q3.bindValue(":cardrarity", "common");
         q3.exec();
         LoggedInUser->AllCards.push_back(CardsToAdd[i]);
-
-
     }
     UserHome *userHome = new class UserHome;
     setCentralWidget(userHome);
 }
 
+//Additional functions for mulitple cards
 void AddCard::addCardToListMultiple() {
 
     CardsToAdd.push_back(userSelectedCard);

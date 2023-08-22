@@ -41,7 +41,7 @@ private:
     Ui::AddCard *ui;
 
     void showFranchises();
-    void showSets(QComboBox *combo1, QComboBox *combo2);
+    void showSets(QComboBox *combo1, QComboBox *combo2, QComboBox *combo3);
 };
 
 #endif // ADDCARD_H

@@ -189,6 +189,33 @@ QPushButton {
        <string>Login</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="forgotButton">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>130</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Bahnschrift</family>
+        <pointsize>8</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: none;
+background-color: rgb(250, 250, 250);</string>
+      </property>
+      <property name="text">
+       <string>Forgot Password...</string>
+      </property>
+     </widget>
+     <zorder>forgotButton</zorder>
+     <zorder>loginUsername</zorder>
+     <zorder>loginPassword</zorder>
+     <zorder>loginButton</zorder>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">

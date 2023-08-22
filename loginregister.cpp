@@ -4,6 +4,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QMessageBox>
+#include "forgotpassword.h"
 
 LoginRegister::LoginRegister(QWidget *parent)
     : QMainWindow(parent)
@@ -15,8 +16,7 @@ LoginRegister::LoginRegister(QWidget *parent)
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("database.db");
 
-
-
+    connect(ui->forgotButton, &QPushButton::clicked, this, &LoginRegister::forgotPassword);
 
 }
 
@@ -28,9 +28,7 @@ LoginRegister::~LoginRegister()
 // Function that manages the login.
 void LoginRegister::on_loginButton_clicked()
 {
-
     db.open();
-
     //Variables for login function
     bool usernameCorrect = false;
     bool passwordCorrect = false;
@@ -38,24 +36,14 @@ void LoginRegister::on_loginButton_clicked()
     bool admin = false;
     QSqlQuery q1;
 
-
-
-
     // Checks user input against database
     q1.exec("SELECT * FROM users");
     while(q1.next()){
 
-
         if(ui->loginUsername->text() == q1.value(1).toString()){
             usernameCorrect = true;                                 //Sets usernameCorrect to true if input matches database.
 
-
-
             LoggedInUser->name = q1.value(1).toString();
-
-
-
-
 
             if(ui->loginPassword->text() == q1.value(2).toString()){
                 passwordCorrect = true;                             // Sets passwordCorrect to true if password is correct.
@@ -92,14 +80,6 @@ void LoginRegister::on_loginButton_clicked()
             LoggedInUser->AllCards.push_back(c1);
         }
     }
-
-
-
-
-
-
-
-
     // Handles login
     if(usernameCorrect == true && passwordCorrect == true && isAdmin == false){ // if non-admin user is found
         QMessageBox::information(this, "Welcome","Welcome Back " + ui->loginUsername->text() + "!");
@@ -119,12 +99,7 @@ void LoginRegister::on_loginButton_clicked()
     else if(usernameCorrect == false && passwordCorrect == false) { // if no matching user is found
         QMessageBox::information(this, "no user found","No user found");
     }
-
-
     db.close();
-
-
-
 }
 
 
@@ -192,11 +167,11 @@ void LoginRegister::on_registerButton_clicked()
         }
 
     }
-
     db.close();
-
-
-
-
 }
 
+void LoginRegister::forgotPassword(){
+    ForgotPassword *forgotPassword = new class ForgotPassword;
+    setCentralWidget(forgotPassword);
+
+}
