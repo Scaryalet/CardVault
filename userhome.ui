@@ -92,7 +92,7 @@ QComboBox::down-arrow:on { /* shift the arrow when popup is open */
      <property name="geometry">
       <rect>
        <x>50</x>
-       <y>50</y>
+       <y>20</y>
        <width>111</width>
        <height>101</height>
       </rect>

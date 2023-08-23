@@ -12,3 +12,9 @@ adminusers::~adminusers()
 {
     delete ui;
 }
+
+void adminusers::on_adminEditSet_clicked()
+{
+
+}
+

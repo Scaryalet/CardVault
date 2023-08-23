@@ -15,6 +15,9 @@ public:
     explicit adminusers(QWidget *parent = nullptr);
     ~adminusers();
 
+private slots:
+    void on_adminEditSet_clicked();
+
 private:
     Ui::adminusers *ui;
 };
