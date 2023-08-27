@@ -21,8 +21,8 @@ AddCard::AddCard(QWidget *parent) :
     connect(ui->franchiseCombo, &QComboBox::currentTextChanged, this, &AddCard::showSetsSingle);
     connect(ui->franchiseComboMultiple, &QComboBox::currentTextChanged, this, &AddCard::showSetsMultiple);
     //Signals to show numbers
-    connect(ui->setCombo, &QComboBox::currentTextChanged, this, &AddCard::showNumbers);
-    connect(ui->setComboMultiple, &QComboBox::currentTextChanged, this, &AddCard::showNumbersMultiple);
+    connect(ui->setCombo, &QComboBox::currentTextChanged, this, &AddCard::showNames);
+    connect(ui->setComboMultiple, &QComboBox::currentTextChanged, this, &AddCard::showNamesMultiple);
     //Signals to show Images
     connect(ui->numberCombo, &QComboBox::currentTextChanged, this, &AddCard::showImage);
     connect(ui->numberComboMultiple, &QComboBox::currentTextChanged, this, &AddCard::showImageMultiple);
@@ -95,7 +95,7 @@ void AddCard::showSets(QComboBox *combo1, QComboBox *combo2, QComboBox *combo3){
 }
 
 //Functions to show the number in combo boxes
-void AddCard::showNumbers(){
+void AddCard::showNames(){
     QString selectedSet = ui->setCombo->currentText();
     ui->numberCombo->clear();
     QSqlQuery q1;
@@ -107,7 +107,7 @@ void AddCard::showNumbers(){
     }
 }
 
-void AddCard::showNumbersMultiple(){
+void AddCard::showNamesMultiple(){
     QString selectedSet = ui->setComboMultiple->currentText();
     ui->numberComboMultiple->clear();
     QSqlQuery q1;
@@ -123,7 +123,7 @@ void AddCard::showNumbersMultiple(){
 void AddCard::showImage(){
     QString selectedSet = ui->setCombo->currentText();
     QString selectedCard = ui->numberCombo->currentText();
-    qDebug() << "Selected Card: " + selectedCard;
+
     QSqlQuery q2;
     q2.exec("SELECT * FROM Cards");
     while(q2.next()){
@@ -141,7 +141,7 @@ void AddCard::showImage(){
 void AddCard::showImageMultiple(){
     QString selectedSet = ui->setComboMultiple->currentText();
     QString selectedCard = ui->numberComboMultiple->currentText();
-    qDebug() << "Selected Card: " + selectedCard;
+
     QSqlQuery q2;
     q2.exec("SELECT * FROM Cards");
     while(q2.next()){

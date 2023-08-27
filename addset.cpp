@@ -18,23 +18,6 @@ AddSet::AddSet(QWidget *parent) :
     // select all sets from DB
     q1.exec("SELECT * FROM Sets");
 
-//    while (q1.next()) {
-//        QString setName = q1.value(1).toString();
-
-//        // check if the set is not already owned by the user
-//        bool setOwned = false;
-//        for (const Set& ownedSet : LoggedInUser->AllSets) {
-//            if (ownedSet.setName == setName) {
-//                setOwned = true;
-//                break;
-//            }
-//        }
-//        // if the set is not owned, add it to the listWidget
-//        if (!setOwned) {
-//            ui->listWidget->addItem(setName);
-//        }
-//    }
-
     franchiseBox();
     connect(ui->addSetButton, &QPushButton::clicked, this, &AddSet::addSet);
     connect(ui->franchiseCombo, &QComboBox::currentTextChanged,this, &AddSet::showSetList);
@@ -81,24 +64,21 @@ void AddSet::addSet(){
     // Returns User to Home
     UserHome *userHomeWindow = new class UserHome;
     setCentralWidget(userHomeWindow);
-
-
 }
 
 void AddSet::on_returnButton_clicked()
-{
+{   //Returns to UserHome
     UserHome *userHomeWindow = new class UserHome;
     setCentralWidget(userHomeWindow);
 }
 
 void AddSet::franchiseBox(){
-
+    //Sets up franchise QComboBox
     QVector <QString> AllSets;
     QSqlQuery q1;
     q1.exec("SELECT * FROM Sets");
     while(q1.next()){
         AllSets.push_back(q1.value(0).toString());
-
     }
     // A set to store unique franchise names, we use QSet because QSet will not store duplicate entries
     QSet<QString> uniqueFranchises;
@@ -118,6 +98,7 @@ void AddSet::franchiseBox(){
 }
 
 void AddSet::showSetList(){
+    //Displays the sets
     db.open();
     QString selectedFranchise = ui->franchiseCombo->currentText();
     QSqlQuery q1;

@@ -1,4 +1,4 @@
-#ifndef ADDCARD_H
+ #ifndef ADDCARD_H
 #define ADDCARD_H
 
 #include <QMainWindow>
@@ -28,8 +28,8 @@ public slots:
 private slots:
     void showSetsSingle();
     void showSetsMultiple();
-    void showNumbers();
-    void showNumbersMultiple();
+    void showNames();
+    void showNamesMultiple();
     void showImage();
     void showImageMultiple();
     void addCardToListMultiple();

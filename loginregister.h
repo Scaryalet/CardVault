@@ -11,6 +11,7 @@ QT_END_NAMESPACE
 class LoginRegister : public QMainWindow
 {
     Q_OBJECT
+
 public:
     LoginRegister(QWidget *parent = nullptr);
     ~LoginRegister();
@@ -20,11 +21,12 @@ public:
 private slots:
     void on_loginButton_clicked();
     void on_registerButton_clicked();
-
     void forgotPassword();
+
 private:
     Ui::LoginRegister *ui;
 };
+
 
 //Structure to hold information about cards
 struct Card {

@@ -11,6 +11,7 @@ LoginRegister::LoginRegister(QWidget *parent)
     , ui(new Ui::LoginRegister)
 {
     setWindowTitle("Card Vault");
+    setWindowIcon(QIcon(":/img/SmallCardVaultLogo.png"));
     ui->setupUi(this);
     LoggedInUser = new CurrentUser;
     db = QSqlDatabase::addDatabase("QSQLITE");
@@ -173,5 +174,4 @@ void LoginRegister::on_registerButton_clicked()
 void LoginRegister::forgotPassword(){
     ForgotPassword *forgotPassword = new class ForgotPassword;
     setCentralWidget(forgotPassword);
-
 }

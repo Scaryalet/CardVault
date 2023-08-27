@@ -7,7 +7,6 @@
 #include "flowlayout.h"
 #include <QPushButton>
 #include <QListWidget>
-#include "addset.h"
 #include <QtGui/QStandardItem>
 #include <QtGui/QStandardItemModel>
 
@@ -42,7 +41,6 @@ UserHome::UserHome(QWidget *parent) :
     connect(ui->filterCombo, &QComboBox::currentTextChanged, this, &UserHome::displayTheCards);
 
     //Functions that run when page loads
-    populateSet2022McDonalds();
     showFranchiseNames();
 }
 
@@ -51,69 +49,12 @@ UserHome::~UserHome()
     delete ui;
 }
 
-//This function can be removed when code is added for database file to copy when app is built
-void UserHome::populateSet2022McDonalds()
-{
-    db.open();
-    QString setName = "2022 McDonalds";
-    QString franchiseName = "Pokemon";
-    int setID = 1;
-    int numberOfCards = 15;
-    QSqlQuery q1;
-
-    q1.exec("SELECT * FROM Sets");
-    bool maccasFound = false;
-    while(q1.next()){
-        if(q1.value(0) == "Pokemon" && q1.value(1) == "2022 McDonalds"){
-            maccasFound = true;
-            break;
-        }
-    }
-    if(!maccasFound){
-        // Insert the set into the Sets table
-
-        q1.prepare("INSERT INTO Sets (Franchise, SetName, SetID, NumberOfCards) VALUES (:franchise, :setName, :setID, :NumberOfCards)");
-        q1.bindValue(":franchise", franchiseName);
-        q1.bindValue(":setName", setName);
-        q1.bindValue(":setID", setID);
-        q1.bindValue(":NumberOfCards", numberOfCards);
-        q1.exec();
-
-
-        // Insert the card details into the Cards table
-        QSqlQuery q2;
-
-        for (int cardNumber = 1; cardNumber <= 15; ++cardNumber) {
-            QString cardRarity = "Common"; // Adjust the rarity as needed
-            //Input image url. cardNumber is the value of the card, 3 is the width of the string (if less than 10, two zeros go in front, less that 100, one zero)
-            //10 is the base of the number system and QLatin1Char('0') makes the character used for padding a 0.
-            QString imageURL = QString(":/img/2022/%1.png").arg(cardNumber, 3, 10, QLatin1Char('0'));
-
-            q2.prepare("INSERT INTO Cards (CardName, SetName, CardID, CardNumber, CardRarity, ImageURL) "
-                       "VALUES (:cardName, :setName, :cardID, :cardNumber, :cardRarity, :imageURL)");
-
-            q2.bindValue(":cardName", cardNumber);
-            q2.bindValue(":cardID", cardNumber);
-            q2.bindValue(":cardNumber", cardNumber);
-            q2.bindValue(":cardRarity", cardRarity);
-            q2.bindValue(":imageURL", imageURL);
-
-            q2.bindValue(":setName", setName);
-
-            q2.exec();
-
-        }
-
-    }
-
-}
 
 //Functions for going to addSet and addCard page
 void UserHome::userAddSet()
 {
     AddSet *addSetWindow = new class AddSet;
     setCentralWidget(addSetWindow);
-
 
 }
 
@@ -129,7 +70,6 @@ void UserHome::showFranchiseNames()
 {
     // A set to store unique franchise names, we use QSet because QSet will not store duplicate entries
     QSet<QString> uniqueFranchises;
-    QVector <QString> vectorFranchises;
     // Loop through the LoggedInUser->AllSets vector to find unique franchise names
     for (const Set& set : LoggedInUser->AllSets) {
         uniqueFranchises.insert(set.franchiseName);
@@ -138,8 +78,6 @@ void UserHome::showFranchiseNames()
     for (const QString& franchiseName : uniqueFranchises) {
         ui->setsCombo->addItem(franchiseName);
     }
-
-
 }
 
 // Function to add sets to the QListWidget
@@ -231,9 +169,11 @@ bool UserHome::shouldShowCard(const QSqlQuery& query, const QString& selectedOpt
 
 //Function to clear the QLayout.
 void UserHome::clearLayout(QLayout *layout) {
+    //If layout is equal to NULL, then it exits the function
     if (layout == NULL)
         return;
     QLayoutItem *item;
+    //Deletes items from the layout
     while((item = layout->takeAt(0))) {
         if (item->layout()) {
             clearLayout(item->layout());

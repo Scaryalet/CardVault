@@ -7,6 +7,7 @@
 #include "flowlayout.h"
 #include "qcombobox.h"
 #include "qlistwidget.h"
+#include <QSqlDatabase>
 #include <QWidget>
 #include <QPainter>
 #include <QPushButton>
@@ -65,12 +66,11 @@ private slots:
     void showUsersSets();
     void clearLayout(QLayout *layout);
     void displayTheCards();
-    void populateSet2022McDonalds();
     void userAddCard();
     void userAddSet();
     void handleExit();
-
     void resetFilter();
+
 private:
     Ui::UserHome *ui;
     QComboBox *setsCombo;

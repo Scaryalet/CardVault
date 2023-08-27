@@ -23,6 +23,8 @@ set(PROJECT_SOURCES
         addset.h addset.cpp addset.ui
         addcard.h addcard.cpp addcard.ui
         forgotpassword.h forgotpassword.cpp forgotpassword.ui
+        forgotpasswordcont.h forgotpasswordcont.cpp forgotpasswordcont.ui
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -58,14 +60,6 @@ set_target_properties(CardVault PROPERTIES
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
-)
-
-
-add_custom_command(
-        TARGET CardVault POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-                ${CMAKE_SOURCE_DIR}/database.db
-                ${CMAKE_CURRENT_BINARY_DIR}
 )
 
 
