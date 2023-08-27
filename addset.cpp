@@ -12,7 +12,6 @@ AddSet::AddSet(QWidget *parent) :
     ui->setupUi(this);
     franchiseCombo=ui->franchiseCombo;
 
-    setWindowTitle("Add New Set");
 
     QSqlQuery q1;
     // select all sets from DB

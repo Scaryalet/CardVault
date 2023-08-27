@@ -15,7 +15,6 @@ UserHome::UserHome(QWidget *parent) :
     ui(new Ui::UserHome)
 
 {
-    setWindowTitle("Home");
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("database.db");
     db.open();
