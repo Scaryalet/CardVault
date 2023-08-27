@@ -100,6 +100,9 @@ void AddSet::showSetList(){
     //Displays the sets
     db.open();
     QString selectedFranchise = ui->franchiseCombo->currentText();
+    //clears the setsList, otherwise it will keep adding to the list, instead of refreshing when changing franchise.
+    ui->setsList->clear();
+
     QSqlQuery q1;
     q1.prepare("SELECT * FROM Sets WHERE Franchise = :franchise");
     q1.bindValue(":franchise", selectedFranchise);
