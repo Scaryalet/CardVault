@@ -140,7 +140,7 @@ background-color: rgb(217, 197, 126);</string>
       </property>
      </widget>
     </widget>
-    <widget class="QComboBox" name="comboBox">
+    <widget class="QComboBox" name="franchiseCombo">
      <property name="geometry">
       <rect>
        <x>470</x>
@@ -194,7 +194,7 @@ border-right: 2px solid #9F9160;</string>
       <string>Return</string>
      </property>
     </widget>
-    <widget class="QListWidget" name="listWidget">
+    <widget class="QListWidget" name="setsList">
      <property name="geometry">
       <rect>
        <x>470</x>
